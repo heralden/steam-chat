@@ -1,0 +1,53 @@
+module.exports = keys;
+
+function keys(interface) {
+  this.interface = interface;
+}
+
+keys.prototype.listen = function() {
+  this.interface.screen.key(['C-c'], function(ch, key) {
+    return process.exit(0);
+  }.bind(this));
+
+  this.interface.inputBar.key(['pageup', 'M-v'], function(ch, key) {
+    this.interface.interpretCommand('scrollb');
+  }.bind(this));
+  this.interface.inputBar.key(['pagedown', 'C-v'], function(ch, key) {
+    this.interface.interpretCommand('scrollf');
+  }.bind(this));
+  this.interface.inputBar.key(['M-w'], function(ch, key) {
+    this.interface.interpretCommand('part');
+  }.bind(this))
+
+  this.interface.inputBar.key(['M-1'], function(ch, key) {
+    this.interface.interpretCommand('w 1');
+  }.bind(this));
+  this.interface.inputBar.key(['M-2'], function(ch, key) {
+    this.interface.interpretCommand('w 2');
+  }.bind(this));
+  this.interface.inputBar.key(['M-3'], function(ch, key) {
+    this.interface.interpretCommand('w 3');
+  }.bind(this));
+  this.interface.inputBar.key(['M-4'], function(ch, key) {
+    this.interface.interpretCommand('w 4');
+  }.bind(this));
+  this.interface.inputBar.key(['M-5'], function(ch, key) {
+    this.interface.interpretCommand('w 5');
+  }.bind(this));
+  this.interface.inputBar.key(['M-6'], function(ch, key) {
+    this.interface.interpretCommand('w 6');
+  }.bind(this));
+  this.interface.inputBar.key(['M-7'], function(ch, key) {
+    this.interface.interpretCommand('w 7');
+  }.bind(this));
+  this.interface.inputBar.key(['M-8'], function(ch, key) {
+    this.interface.interpretCommand('w 8');
+  }.bind(this));
+  this.interface.inputBar.key(['M-9'], function(ch, key) {
+    this.interface.interpretCommand('w 9');
+  }.bind(this));
+
+  this.interface.inputBar.on('keypress', function() {
+    this.interface.idle();
+  }.bind(this));
+};
