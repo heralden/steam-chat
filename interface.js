@@ -37,9 +37,8 @@ function interface() {
   }
 
   if (process.env.NODE_ENV == 'debug') {
-    this.util = require('util');
     this.session.debug = true;
-  } else if (process.env.NODE_ENV == 'debug_v') { // print personaState structures
+  } else if (process.env.NODE_ENV == 'debug_v') { // print personaState and chatMsg events
     this.util = require('util');
     this.session.debug = true;
     this.session.debug_v = true;
@@ -261,15 +260,22 @@ interface.prototype.interpretCommand = function(command) {
 			return process.exit(0);
     case 'debug':
       this.session.debug = !this.session.debug;
-      this.chatPrint("DBG: Debug mode has been toggled!", 'log');
+      this.chatPrint("DBG: Debug mode has been set to {white-fg}" + this.session.debug + "{/white-fg}!", 'log');
+      this.input();
+      break;
+    case 'debug_v':
+      if (this.util === undefined) {
+        this.util = require('util');
+      }
+      this.session.debug_v = !this.session.debug_v;
+      this.chatPrint("DBG: Debug verbose mode has been set to {white-fg}" + this.session.debug_v + "{/white-fg}!", 'log');
       this.input();
       break;
     case 'dump':
-      if (this.util !== undefined) {
-        fs.writeFile('steamDump.txt', this.util.inspect(this.steam, { depth: null }));
-      } else {
-        this.chatPrint("This command is only available in debug mode.", 'log');
+      if (this.util === undefined) {
+        this.util = require('util');
       }
+      fs.writeFile('steamDump.txt', this.util.inspect(this.steam, { depth: null }));
       this.input();
       break;
 		case 'scrollb':
