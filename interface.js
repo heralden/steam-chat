@@ -276,6 +276,7 @@ interface.prototype.interpretCommand = function(command) {
         this.util = require('util');
       }
       fs.writeFile('steamDump.txt', this.util.inspect(this.steam, { depth: null }));
+      fs.chmod('steamDump.txt', 0600);
       this.input();
       break;
 		case 'scrollb':
@@ -608,12 +609,14 @@ interface.prototype.saveConfig = function(type) {
     json.scrollback = this.scrollback;
     json.autojoin = this.autojoin;
     fs.writeFile('config.json', JSON.stringify(json));
+    fs.chmod('config.json', 0600);
   } else {
     json.sentryauth = this.steam.sentryauth;
     json.userlistwidth = this.userlistwidth;
     json.scrollback = this.scrollback;
     json.autojoin = this.autojoin;
     fs.writeFile('config.json', JSON.stringify(json));
+    fs.chmod('config.json', 0600);
   }
 };
 

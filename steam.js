@@ -136,6 +136,7 @@ function steamChatClient(interface) {
     if (this.interface.session.debug) this.interface.chatPrint("DBG: updateMachineAuth event.", 'log');
 
     fs.writeFile('sentryfile.' + this.username + '.hash', sentry.bytes);
+    fs.chmod('sentryfile.' + this.username + '.hash', 0600);
 
     var sentryHash = crypto.createHash('sha1').update(sentry.bytes).digest();
     callback({ sha_file: sentryHash });

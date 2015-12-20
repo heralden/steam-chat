@@ -14,6 +14,9 @@
     "steam": "^1.2.0",
     "crypto": "^0.0.3"
   },
+  "engines": {
+    "node": ">=4.1.1"
+  },
   "scripts": {
     "start": "node index.js"
   },
