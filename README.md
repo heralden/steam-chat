@@ -4,7 +4,7 @@ Written using [node-steam](https://github.com/seishun/node-steam) and [blessed](
 
 steam-chat is currently a work-in-progress. Some commands inside the client will crash the program, and I have a long list of features to add and bugs to fix. However, the client is in a useable state. Feel free to leave any feedback with this in mind.
 
-**Note: Only Node.js v4.x is currently supported.**
+**Note: Only Node.js >= v4.1.1 is supported.**
 
 # Usage
 
