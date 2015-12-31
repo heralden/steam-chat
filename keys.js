@@ -50,4 +50,34 @@ keys.prototype.listen = function() {
   this.interface.inputBar.on('keypress', function() {
     this.interface.idle();
   }.bind(this));
+
+  // Text editing 
+
+  this.interface.inputBar.key(['C-u'], function(ch, key) {
+    this.interface.session.yankBuffer = this.interface.inputBar.getValue();
+    this.interface.inputBar.clearValue();
+    this.interface.screen.render();
+  }.bind(this));
+
+  this.interface.inputBar.key(['C-y'], function(ch, key) {
+    this.interface.inputBar.setValue(this.interface.inputBar.getValue() + this.interface.session.yankBuffer);
+    this.interface.screen.render();
+  }.bind(this));
+
+  this.interface.inputBar.key(['C-w'], function(ch, key) {
+    var text = this.interface.inputBar.getValue();
+    text = text.replace(/\s+$/gm,''); // remove trailing whitespace
+    var yank = text.substring(text.lastIndexOf(' '));
+    text = text.substring(0, text.lastIndexOf(' '));
+    this.interface.session.yankBuffer = yank;
+    this.interface.inputBar.setValue(text);
+    this.interface.screen.render();
+  }.bind(this));
+
+  /* FIX: Moves cursor but not input.
+  this.interface.inputBar.key(['C-b'], function(ch, key) {
+    this.interface.program.back();
+    this.interface.screen.render();
+  }.bind(this));
+  */
 };
