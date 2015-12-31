@@ -4,6 +4,7 @@ module.exports = interface;
 
 function interface() {
   this.blessed = require('blessed');
+  this.program = this.blessed.program();
 
   this.screen = this.blessed.screen({
     autoPadding: true,
@@ -20,7 +21,8 @@ function interface() {
     unread: [],
     away: false,
     friends: {},
-    groups: {}
+    groups: {},
+    yankBuffer: ''
   };
 
   this.doc = JSON.parse(fs.readFileSync('doc.json'));
@@ -51,7 +53,7 @@ function interface() {
         this.resizeChat(this.session.chat[index]);
       }
     }
-    //this.switchChat(this.session.chat[this.session.currentChat]); // uncomment if necessary
+    this.switchChat(this.session.chat[this.session.currentChat]);
   }.bind(this));
 }
 
@@ -134,18 +136,7 @@ interface.prototype.resizeUI = function() {
 	});
 	this.screen.append(this.statusBar);
   this.statusBar.setContent(statusBarContent);
-  /*
-  var inputBarContent = this.inputBar.getContent();
-  //this.inputBar.destroy();
-	this.inputBar = this.blessed.textbox({
-		keys: true,
-		inputOnFocus: false,
-		bottom: 0,
-		height: 1
-	});
-	this.screen.append(this.inputBar);
-  this.inputBar.setContent(inputBarContent);
-  */
+
   this.line.destroy();
 	this.line = this.blessed.line({
 		right: this.userlistwidth,
@@ -280,12 +271,12 @@ interface.prototype.interpretCommand = function(command) {
       this.input();
       break;
 		case 'scrollb':
-			this.session[this.session.chat[this.session.currentChat]].scroll(-this.session[this.session.chat[this.session.currentChat]].height);
+			this.session[this.session.chat[this.session.currentChat]].scroll(-this.session[this.session.chat[this.session.currentChat]].height + 2);
 			this.screen.render();
       this.input();
 			break;
 		case 'scrollf':
-			this.session[this.session.chat[this.session.currentChat]].scroll(this.session[this.session.chat[this.session.currentChat]].height);
+			this.session[this.session.chat[this.session.currentChat]].scroll(this.session[this.session.chat[this.session.currentChat]].height - 2);
 			this.screen.render();
       this.input();
 			break;
@@ -460,7 +451,11 @@ interface.prototype.interpretCommand = function(command) {
 			this.statusUpdate(args);
       this.input();
 			break;
-   case 'help':
+    case 'dbgaddchat':
+      this.buildChat('test');
+      this.input();
+      break;
+    case 'help':
       this.chatPrint(this.doc.cmd.help, 'log');
       this.input();
       break;
