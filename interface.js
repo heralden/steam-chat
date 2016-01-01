@@ -335,7 +335,7 @@ interface.prototype.interpretCommand = function(command) {
         }
       }
       if (name.length > 0) {
-        this.selectFriends(name, function(err, item) {
+        this.listSelect(name, function(err, item) {
           this.steam.steamFriends.addFriend(ID[name.indexOf(item)]);
           this.chatPrint("Accepted friend request from {blue-fg}" + item + "{/blue-fg}!", 'log');
         }.bind(this));
@@ -378,7 +378,7 @@ interface.prototype.interpretCommand = function(command) {
       }
       this.input();
 			break;
-    /*case 'nick': // If two arguments, try to match first arg as name, nick or ID, then use second argument as nick for corresponding ID. If one argument, set nick for ID in session[session.currentChat] if ID is a steam user ID. If no arguments, run selectFriends.
+    /*case 'nick': // If two arguments, try to match first arg as name, nick or ID, then use second argument as nick for corresponding ID. If one argument, set nick for ID in session[session.currentChat] if ID is a steam user ID. If no arguments, run listSelect.
       //Perhaps you should create prototypes/functions for checking if an arg is a name, nick or ID to ease this implementation?
       if (args) {
 
@@ -397,55 +397,19 @@ interface.prototype.interpretCommand = function(command) {
       this.input();
       break;
 		case 'pm':
-      if (this.steam.steamClient.connected) {
-        if (args) { 
-          if (args.length == 17 && /7656119.*/.test(args)) { // steamID
-            if (this.session.chat.indexOf(args) < 0) { // FIX: you need to check if arg points to a valid steamID
-              this.buildChat(args);
-            }
-            if (this.session.currentChat !== this.session.chat.indexOf(args)) {
-              this.switchChat(args);
-            }
-            this.input();
-          /*} else if (this.nicks.indexOf(args) > -1) { // nick
-            partner = this.nicks[this.nicks.indexOf(args)];
-            this.chatPrint('FIX: I will now message: ' + partner, 'log');
-            // FIX: Implement nicks
-            this.input();*/
-          } else { // name
-            this.steam.getFriends(function pmNameCallback(name, ID, state) {
-               if (name.indexOf(args) > -1) {
-                 partner = ID[name.indexOf(args)];
-                 if (this.session.chat.indexOf(partner) < 0) {
-                   this.buildChat(partner);
-                 }
-                 if (this.session.currentChat !== this.session.chat.indexOf(partner)) {
-                  this.switchChat(partner);
-                 } 
-                 this.input();
-               } else {
-                 this.chatPrint('Invalid command: ' + cmd + ': Argument is not a Steam ID, username or nick.', 'log');
-                 this.input();
-               }
-            }.bind(this));
-          } 
+      this.findFriend(args, function(err, steamID) {
+        if (err) {
+          this.chatPrint(err, 'log');
+          this.input();
         } else {
-          this.selectFriends(null, function(err, item) {
-            this.steam.getFriends(function pmIdCallback(name, ID, state) {
-              partner = ID[name.indexOf(item)];
-              if (this.session.chat.indexOf(partner) < 0) {
-                this.buildChat(partner);
-              }
-              if (this.session.currentChat !== this.session.chat.indexOf(partner)) {
-                this.switchChat(partner);
-              }
-            }.bind(this));
-          }.bind(this));
+          if (this.session.chat.indexOf(steamID) < 0) {
+            this.buildChat(steamID);
+          }
+          if (this.session.currentChat !== this.session.chat.indexOf(steamID)) {
+            this.switchChat(steamID);
+          }
         }
-      } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
-        this.input();
-      }
+      }.bind(this));
 			break;				
 		case 'dbgstatusupdate':
 			this.statusUpdate(args);
@@ -724,7 +688,82 @@ interface.prototype.sortChatID = function(a, b) {
 	return a_num - b_num;
 };
 
-interface.prototype.selectFriends = function(names, callback) {
+interface.prototype.findFriend = function(args, callback) {
+  if (this.steam.steamClient.connected) {
+    if (args) {
+      if (args.length == 17 && /7656119.*/.test(args) && this.session.friends.hasOwnProperty(args)) { 
+        callback(null, args);
+        this.input();
+      /*} else if (this.nicks.indexOf(args) > -1) { // nick
+        partner = this.nicks[this.nicks.indexOf(args)];
+        this.chatPrint('FIX: I will now message: ' + partner, 'log');
+        // FIX: Implement nicks
+        this.input();*/
+      } else { // name
+        var res = false;
+        for (var steamID in this.session.friends) {
+          if (this.session.friends.hasOwnProperty(steamID)) {
+            var partner = this.session.friends[steamID];
+            if (partner.name == args) {
+              res = true;
+              callback(null, steamID);
+              this.input();
+              break;
+            }
+          }
+        }
+        if (!res) { // try searching through grouplist
+          for (var chatID in this.session.groups) {
+            if (this.session.groups.hasOwnProperty(chatID)) {
+              for (var steamID in this.session.groups[chatID]) {
+                if (this.session.groups[chatID].hasOwnProperty(steamID)) {
+                  var partner = this.session.groups[chatID][steamID];
+                  if (partner.name == args) {
+                    res = true;
+                    callback(null, steamID);
+                    this.input();
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+        if (!res) {
+          callback("Invalid argument: Argument is not a friends or chat members steam ID or username.");
+        }
+      }
+    } else { // no arg - initiate listselect
+      this.listSelect(null, function(err, item) {
+        if (this.session.chat[this.session.currentChat].length == 18) { // select from grouplist
+          for (var steamID in this.session.groups[this.session.chat[this.session.currentChat]]) {
+            if (this.session.groups[this.session.chat[this.session.currentChat]].hasOwnProperty(steamID)) {
+              var partner = this.session.groups[this.session.chat[this.session.currentChat]][steamID];
+              if (partner.name == item) {
+                callback(null, steamID);
+                break;
+              }
+            }
+          }
+        } else { // select from friendlist
+          for (var steamID in this.session.friends) {
+            if (this.session.friends.hasOwnProperty(steamID)) {
+              var partner = this.session.friends[steamID];
+              if (partner.name == item) {
+                callback(null, steamID);
+                break;
+              }
+            }
+          }
+        }
+      }.bind(this));
+    }
+  } else { // no steam connection
+    callback(this.doc.cmd.notConnected);
+  }
+};
+
+interface.prototype.listSelect = function(names, callback) {
   if (names === null) {
     names = this.userWin.getContent().split('\n');
     names.pop();
