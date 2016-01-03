@@ -66,9 +66,9 @@ keys.prototype.listen = function() {
 
   this.interface.inputBar.key(['C-w'], function(ch, key) {
     var text = this.interface.inputBar.getValue();
-    text = text.replace(/\s+$/gm,''); // remove trailing whitespace
-    var yank = text.substring(text.lastIndexOf(' '));
-    text = text.substring(0, text.lastIndexOf(' '));
+    var textTrim = text.replace(/\s+$/gm,''); // remove trailing whitespace
+    var yank = text.substring(textTrim.lastIndexOf(' ') + 1);
+    text = text.substring(0, textTrim.lastIndexOf(' ') + 1);
     this.interface.session.yankBuffer = yank;
     this.interface.inputBar.setValue(text);
     this.interface.screen.render();
