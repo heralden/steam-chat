@@ -10,7 +10,7 @@ function interface() {
     autoPadding: true,
     fullUnicode: true,
     smartCSR: true,
-    resizeTimeout: 300
+    resizeTimeout: 600
   }); 
 
   this.session = {
@@ -210,13 +210,21 @@ interface.prototype.input = function() {
         if (this.session.chat[this.session.currentChat].length == 18) { 
           if (this.steam.steamFriends.chatRooms.hasOwnProperty(this.session.chat[this.session.currentChat])) {
             this.steam.steamFriends.sendMessage(this.session.chat[this.session.currentChat], text);
-            this.chatPrint(this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name + ': ' + text, this.session.chat[this.session.currentChat]);
+            if (this.steam.steamFriends.personaStates.hasOwnProperty(this.steam.steamClient.steamID)) {
+              this.chatPrint(this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name + ': ' + text, this.session.chat[this.session.currentChat]);
+            } else {
+              this.chatPrint('undefined: ' + text, this.session.chat[this.session.currentChat]);
+            }
           } else {
             this.chatPrint("Error: You are not currently in this group chat.", 'log');
           }
         } else {
           this.steam.steamFriends.sendMessage(this.session.chat[this.session.currentChat], text);
-          this.chatPrint(this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name + ': ' + text, this.session.chat[this.session.currentChat]);
+          if (this.steam.steamFriends.personaStates.hasOwnProperty(this.steam.steamClient.steamID)) {
+            this.chatPrint(this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name + ': ' + text, this.session.chat[this.session.currentChat]);
+          } else {
+            this.chatPrint('undefined: ' + text, this.session.chat[this.session.currentChat]);
+          }
         }
       } else {
         this.chatPrint("Error: No connection with Steam.", 'log');
