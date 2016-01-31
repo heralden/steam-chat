@@ -182,16 +182,18 @@ interface.prototype.resizeChat = function(ID) {
 };
 
 interface.prototype.switchChat = function(targetChat) {
-  this.session.lastChat = this.session.currentChat;
-  this.session.currentChat = this.session.chat.indexOf(targetChat);
-  this.session[targetChat].setFront();
-  this.screen.render();
-  this.statusUpdate('w' + this.session.chat.indexOf(targetChat));
-  this.statusUpdate('p' + targetChat);
-  process.nextTick(function() {
-    this.statusUpdate('c' + targetChat);
-  }.bind(this));
-  this.updateList();
+  if (this.session[targetChat] !== undefined) {
+    this.session.lastChat = this.session.currentChat;
+    this.session.currentChat = this.session.chat.indexOf(targetChat);
+    this.session[targetChat].setFront();
+    this.screen.render();
+    this.statusUpdate('w' + this.session.chat.indexOf(targetChat));
+    this.statusUpdate('p' + targetChat);
+    process.nextTick(function() {
+      this.statusUpdate('c' + targetChat);
+    }.bind(this));
+    this.updateList();
+  }
 };
 
 interface.prototype.input = function() {
@@ -294,6 +296,7 @@ interface.prototype.interpretCommand = function(command) {
       break;
     case 'disconnect':
       this.steam.steamClient.disconnect();
+      this.clearFriends();
       if (this.steam.steamClient.connected == false) {
         this.chatPrint('Steam: {red-fg}Disconnected{/red-fg}', 'log');
       }
@@ -918,6 +921,12 @@ interface.prototype.updateFriends = function() {
     this.updateList();
   }
 
+};
+
+interface.prototype.clearFriends = function() {
+  this.userWin.setContent('');
+  this.session.friends = {};
+  this.session.groups = {};
 };
 
 interface.prototype.idle = function() {

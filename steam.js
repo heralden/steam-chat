@@ -108,6 +108,7 @@ function steamChatClient(interface) {
   }.bind(this));
 
   this.steamClient.on('error', function(error) {
+    if (error) this.interface.clearFriends();
     this.interface.chatPrint('Steam: {red-fg}' + error + '{/red-fg}', 'log');
     if (this.interface.session.debug) this.interface.chatPrint("DBG: error event: " + error, 'log');
     if (this.steam_error === undefined) { // not a login failure
