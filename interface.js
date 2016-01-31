@@ -799,7 +799,7 @@ interface.prototype.listSelect = function(names, callback) {
 	this.friendSelect = this.blessed.list({
 		top: 0,
 		right: 0,
-		width: this.userlistwidth,
+		width: this.userlistwidth - 1,
 		height: this.screen.height - 2,
 		tags: true,
 		keys: true,
