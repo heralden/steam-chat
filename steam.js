@@ -109,6 +109,7 @@ function steamChatClient(interface) {
 
   this.steamClient.on('error', function(error) {
     if (error) this.interface.clearFriends();
+    this.interface.statusUpdate('d1');
     this.interface.chatPrint('Steam: {red-fg}' + error + '{/red-fg}', 'log');
     if (this.interface.session.debug) this.interface.chatPrint("DBG: error event: " + error, 'log');
     if (this.steam_error === undefined) { // not a login failure
@@ -153,6 +154,7 @@ function steamChatClient(interface) {
         this.sentryauth = 2;
         this.interface.saveConfig();
       }
+      this.interface.statusUpdate('d0');
       this.interface.chatPrint("Steam: Logged in!", 'log');
       if (this.interface.session.away == true) {
         this.steamFriends.setPersonaState(this.Steam.EPersonaState.Away);

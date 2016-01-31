@@ -33,7 +33,7 @@ function interface() {
     this.scrollback = config.scrollback;
     this.autojoin = config.autojoin;
   } else {
-    this.userlistwidth = 25;
+    this.userlistwidth = 26;
     this.scrollback = 1000;
     this.autojoin = [];
   }
@@ -47,13 +47,7 @@ function interface() {
   }
 
   this.screen.on('resize', function() { 
-    this.resizeUI();
-    for (var index in this.session.chat) {
-      if (this.session.chat.hasOwnProperty(index)){
-        this.resizeChat(this.session.chat[index]);
-      }
-    }
-    this.switchChat(this.session.chat[this.session.currentChat]);
+    this.resize();
   }.bind(this));
 }
 
@@ -71,7 +65,7 @@ interface.prototype.buildUI = function() {
 	this.userWin = this.blessed.box({
 		top: 0,
 		right: 0,
-		width: this.userlistwidth,
+		width: this.userlistwidth - 1,
 		height: this.screen.height - 2,
 		tags: true,
 		style: { scrollbar: { bg: 'blue' } }
@@ -93,8 +87,8 @@ interface.prototype.buildUI = function() {
 	});
 	this.screen.append(this.inputBar);
 	this.line = this.blessed.line({
-		right: this.userlistwidth,
-		height: this.screen.height -2,
+		right: this.userlistwidth - 1,
+		height: this.screen.height - 2,
 		orientation: 'vertical',
 		type: 'line'
 	});
@@ -108,6 +102,18 @@ interface.prototype.buildUI = function() {
     this.statusUpdate('t' + time);
     setTimeout(statusClock.bind(this), timeoutDelay);
   }).bind(this)();
+
+  this.statusUpdate('d1');
+};
+
+interface.prototype.resize = function() {
+    this.resizeUI();
+    for (var index in this.session.chat) {
+      if (this.session.chat.hasOwnProperty(index)){
+        this.resizeChat(this.session.chat[index]);
+      }
+    }
+    this.switchChat(this.session.chat[this.session.currentChat]);
 };
 
 interface.prototype.resizeUI = function() {
@@ -117,7 +123,7 @@ interface.prototype.resizeUI = function() {
 	this.userWin = this.blessed.box({
 		top: 0,
 		right: 0,
-		width: this.userlistwidth,
+		width: this.userlistwidth - 1,
 		height: this.screen.height - 2,
 		tags: true,
 		style: { scrollbar: { bg: 'blue' } }
@@ -139,8 +145,8 @@ interface.prototype.resizeUI = function() {
 
   this.line.destroy();
 	this.line = this.blessed.line({
-		right: this.userlistwidth,
-		height: this.screen.height -2,
+		right: this.userlistwidth - 1,
+		height: this.screen.height - 2,
 		orientation: 'vertical',
 		type: 'line'
 	});
@@ -297,6 +303,7 @@ interface.prototype.interpretCommand = function(command) {
     case 'disconnect':
       this.steam.steamClient.disconnect();
       this.clearFriends();
+      this.statusUpdate('d1');
       if (this.steam.steamClient.connected == false) {
         this.chatPrint('Steam: {red-fg}Disconnected{/red-fg}', 'log');
       }
@@ -480,11 +487,14 @@ interface.prototype.interpretCommand = function(command) {
           break;
         case 'userlistwidth':
           this.userlistwidth = arg2;
-          this.buildUI();
+          this.resize();
+          this.saveConfig();
           break;
         case 'scrollback':
           this.scrollback = arg2;
-          break; // FIX: add default case with usage information
+          this.resize();
+          this.saveConfig();
+          break; 
         default:
 			this.chatPrint('Unknown command: ' + cmd + ' ' + arg1 + ' ' + arg2 + " Please type {white-fg}/help{/white-fg} for a list of commands.", 'log');
       }
@@ -499,7 +509,7 @@ interface.prototype.interpretCommand = function(command) {
             if (arg2.length == 18) {
               if (this.autojoin.indexOf(arg2) < 0) {
                 this.autojoin.push(arg2);
-                this.saveConfig('autojoin');
+                this.saveConfig();
               } else {
                 this.chatPrint(cmd + ": Error: chatID has already been added to autojoin: " + arg2, 'log');
               }
@@ -508,7 +518,7 @@ interface.prototype.interpretCommand = function(command) {
             }
           } else if (this.session.chat[this.session.currentChat].length == 18) {
             this.autojoin.push(this.session.chat[this.session.currentChat]);
-            this.saveConfig('autojoin');
+            this.saveConfig();
           } else {
             this.chatPrint(cmd + ": Error: Please switch to a group chat window or specify a chatID.", 'log');
           }
@@ -519,20 +529,20 @@ interface.prototype.interpretCommand = function(command) {
               if (this.autojoin.indexOf(arg2) >= 0) {
                 var index = this.autojoin.indexOf(arg2);
                 this.autojoin.splice(index, 1);
-                this.saveConfig('autojoin');
+                this.saveConfig();
               } else {
                 this.chatPrint(cmd + ": Error: chatID does not exist in autojoin: " + arg2, 'log');
               }
             } else if (this.autojoin[arg2]) { // argument is an index
               this.autojoin.splice(arg2, 1);
-              this.saveConfig('autojoin');
+              this.saveConfig();
             } else {
               this.chatPrint(cmd + ": Error: Please specify an index or chatID to delete from autojoin.", 'log');
             }
           } else if (this.session.chat[this.session.currentChat].length == 18) {
             var index = this.autojoin.indexOf(this.session.chat[this.session.currentChat]);
             this.autojoin.splice(index, 1);
-            this.saveConfig('autojoin');
+            this.saveConfig();
           } else {
             this.chatPrint(cmd + ": Error: Please switch to a group chat window or specify a chatID.", 'log');
           }
@@ -602,6 +612,13 @@ interface.prototype.statusUpdate = function(call) {
 			break;
     case 'a': //away
 			this.session.status[1] = ' {cyan-fg}[{/cyan-fg}{yellow-fg}' + this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name + '{/yellow-fg}{cyan-fg}]{/cyan-fg}';
+      break;
+    case 'd': //disconnected
+      if (arg == 1) {
+        this.session.status[4] = ' {red-fg}[DISCONNECTED]{/red-fg}';
+      } else if (arg == 0) {
+        this.session.status[4] = '';
+      }
       break;
 		case 'c': //current group chat / PM
       var c = arg;
@@ -687,7 +704,7 @@ interface.prototype.statusUpdate = function(call) {
   if (this.session.unread.length > 0) {
     unread = ' {cyan-fg}[{/cyan-fg}' + this.session.unread.sort(this.sortChatID) + '{cyan-fg}]{/cyan-fg}';
   } 
-  this.statusBar.setContent(this.session.status[0] + this.session.status[1] + this.session.status[2] + this.session.status[3] + unread);
+  this.statusBar.setContent(this.session.status[0] + this.session.status[1] + this.session.status[2] + this.session.status[3] + unread + this.session.status[4]);
 	this.screen.render();
 };
 
