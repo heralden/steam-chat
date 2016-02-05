@@ -178,7 +178,7 @@ function steamChatClient(interface) {
       }
 
     } else if (logonResp.eresult == this.Steam.EResult.AccountLogonDenied) {
-      this.interface.chatPrint("Error: Steam Guard is active. Please enter a Steam Guard code with the {white-fg}/set guardcode{/white-fg} command. If you're using the Steam Mobile Authenticator, please enter your code with the {white-fg}/set twofactor{/white-fg} command instead. Run {white-fg}/connect{/white-fg} again, once your code has been set.", 'log');
+      this.interface.chatPrint("Error: Steam Guard is active. Please enter a Steam Guard code with the {cyan-fg}/set guardcode{/cyan-fg} command. If you're using the Steam Mobile Authenticator, please enter your code with the {cyan-fg}/set twofactor{/cyan-fg} command instead. Run {cyan-fg}/connect{/cyan-fg} again, once your code has been set.", 'log');
       this.steam_error = 'AccountLogonDenied';
     } else {
       for (var errormsg in this.Steam.EResult) {
@@ -203,10 +203,10 @@ steamChatClient.prototype.connect = function() {
       this.steamClient.connect();
 
     } else {
-      this.interface.chatPrint("Error: Invalid username or password. Please set your login information correctly and run {white-fg}/connect{/white-fg}.", 'log');
+      this.interface.chatPrint("Error: Invalid username or password. Please set your login information correctly and run {cyan-fg}/connect{/cyan-fg}.", 'log');
     }
   } else {
-    this.interface.chatPrint("Warning: Username and password not defined. Please run {white-fg}/set username{/white-fg} and {white-fg}/set password{/white-fg} commands with your credentials as arguments, then run {white-fg}/connect{/white-fg}. Use {white-fg}/saveconfig{/white-fg} if you wish to save your login information. For a list of commands, run {white-fg}/help{/white-fg}.", 'log');
+    this.interface.chatPrint("Warning: Username and password not defined. Please run {cyan-fg}/set username{/cyan-fg} and {cyan-fg}/set password{/cyan-fg} commands with your credentials as arguments, then run {cyan-fg}/connect{/cyan-fg}. Use {cyan-fg}/saveconfig{/cyan-fg} if you wish to save your login information. For a list of commands, run {cyan-fg}/help{/cyan-fg}.", 'log');
   }
 };
 
@@ -267,7 +267,7 @@ steamChatClient.prototype.listen = function() {
     }
     if (this.interface.session.debug) this.interface.chatPrint("DBG: friend event: " + user + ' ' + steamID + ' ' + FriendRelationship, 'log');
     if (FriendRelationship == this.Steam.EFriendRelationship.RequestRecipient) {
-      this.interface.chatPrint("You have received a friend request from {blue-fg}" + user + "{/blue-fg}. Type {white-fg}/accept{/white-fg} to cycle through your friend requests and choose which to accept.", 'log');
+      this.interface.chatPrint("You have received a friend request from {blue-fg}" + user + "{/blue-fg}. Type {cyan-fg}/accept{/cyan-fg} to cycle through your friend requests and choose which to accept.", 'log');
     } else if (FriendRelationship == this.Steam.EFriendRelationship.None) {
       if (this.interface.session.friends.hasOwnProperty(steamID)) {
         delete this.interface.session.friends[steamID];
@@ -331,7 +331,7 @@ steamChatClient.prototype.listen = function() {
         if (this.steamFriends.friends[steamID] == this.Steam.EFriendRelationship.RequestRecipient) {
           this.steamFriends.requestFriendData(steamID);
           this.getName(steamID, function(user) {
-            this.interface.chatPrint("You have a pending friend request from {blue-fg}" + user + "{/blue-fg}. Type {white-fg}/accept{/white-fg} to cycle through your friend requests and choose which to accept.", 'log');
+            this.interface.chatPrint("You have a pending friend request from {blue-fg}" + user + "{/blue-fg}. Type {cyan-fg}/accept{/cyan-fg} to cycle through your friend requests and choose which to accept.", 'log');
           }.bind(this));
         }
       }
@@ -352,7 +352,7 @@ steamChatClient.prototype.listen = function() {
   this.steamFriends.on('chatInvite', function(chatID, chatName, steamID) {
     this.interface.session.lastInvite = chatID;
     var user = this.steamFriends.personaStates[steamID].player_name;
-    this.interface.chatPrint("You have received an invite to {white-fg}" + chatName + "{/white-fg} ID {white-fg}" + chatID + "{/white-fg}, by {blue-fg}" + user + "{/blue-fg}. Type {white-fg}/join{/white-fg} if you want to enter the chatroom", 'log');
+    this.interface.chatPrint("You have received an invite to {blue-fg}" + chatName + "{/blue-fg} ID {blue-fg}" + chatID + "{/blue-fg}, by {blue-fg}" + user + "{/blue-fg}. Type {cyan-fg}/join{/cyan-fg} if you want to enter the chatroom", 'log');
   }.bind(this));
 
 };

@@ -22,7 +22,8 @@ function interface() {
     away: false,
     friends: {},
     groups: {},
-    yankBuffer: ''
+    yankBuffer: '',
+    cmdConfirm: ''
   };
 
   this.doc = JSON.parse(fs.readFileSync('doc.json'));
@@ -309,6 +310,38 @@ interface.prototype.interpretCommand = function(command) {
       }
       this.input();
       break;
+    case 'yes': case 'y':
+      if (this.steam.steamClient.connected) {
+        if (this.session.cmdConfirm.length > 0) {
+          var type = this.session.cmdConfirm.substring(0,1),
+            arg = this.session.cmdConfirm.substring(1);
+          switch (type) {
+            case 'r': // remove friend
+              this.steam.steamFriends.removeFriend(arg);
+              this.session.cmdConfirm = '';
+              this.chatPrint('Friend has been succesfully removed.', 'log');
+              this.updateList();
+              break;
+            default: 
+              this.chatPrint(cmd + ": Error: Malformed cmdConfirm.", 'log');
+          }
+        } else {
+          this.chatPrint(cmd + ": Error: Nothing to confirm.", 'log');
+        }
+      } else {
+        this.chatPrint(this.doc.cmd.notConnected, 'log');
+      }
+      this.input();
+      break;
+    case 'no': case 'n':
+      if (this.session.cmdConfirm.length > 0) {
+        this.session.cmdConfirm = '';
+        this.chatPrint('Confirmation has been rejected.', 'log');
+      } else {
+        this.chatPrint(cmd + ": Error: No confirmation is present.", 'log');
+      }
+      this.input();
+      break;
     case 'w':
       if (args) {
         var targetIndex = parseInt(args) - 1;
@@ -401,12 +434,12 @@ interface.prototype.interpretCommand = function(command) {
       if (args) {
 
       } else if ( {*/
-    case 'add':
+    case 'add': // send friend invite
       if (this.steam.steamClient.connected) {
         if (args) {
           if (args.length == 17 && /7656119.*/.test(args)) { // steamID
             this.steam.steamFriends.addFriend(args);
-            this.chatPrint('Sent a friend request to {white-fg} ' + args + ' {/white-fg}!', 'log');
+            this.chatPrint('Sent a friend request to {blue-fg} ' + args + ' {/blue-fg}!', 'log');
           }
         }
       } else {
@@ -414,20 +447,46 @@ interface.prototype.interpretCommand = function(command) {
       }
       this.input();
       break;
+    case 'remove': // remove from friends list
+      if (this.steam.steamClient.connected) {
+        this.findFriend(args, function(err, steamID) {
+          if (err) {
+            this.input();
+            this.chatPrint(err, 'log');
+          } else {
+            var partner = this.session.friends[steamID];
+            var name = steamID;
+            if (partner.name !== undefined) {
+              name = partner.name;
+            }
+            this.session.cmdConfirm = 'r' + steamID;
+            this.chatPrint('The following friend will be removed: {blue-fg}' + name + '{/blue-fg}. Please type /yes or /no to confirm.', 'log');
+          }
+        }.bind(this));
+      } else {
+        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.input();
+      }
+      break;
 		case 'pm':
-      this.findFriend(args, function(err, steamID) {
-        if (err) {
-          this.chatPrint(err, 'log');
-          this.input();
-        } else {
-          if (this.session.chat.indexOf(steamID) < 0) {
-            this.buildChat(steamID);
+      if (this.steam.steamClient.connected) {
+        this.findFriend(args, function(err, steamID) {
+          if (err) {
+            this.chatPrint(err, 'log');
+            this.input();
+          } else {
+            if (this.session.chat.indexOf(steamID) < 0) {
+              this.buildChat(steamID);
+            }
+            if (this.session.currentChat !== this.session.chat.indexOf(steamID)) {
+              this.switchChat(steamID);
+            }
           }
-          if (this.session.currentChat !== this.session.chat.indexOf(steamID)) {
-            this.switchChat(steamID);
-          }
-        }
-      }.bind(this));
+        }.bind(this));
+      } else {
+        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.input();
+      }
 			break;				
 		case 'dbgstatusupdate':
 			this.statusUpdate(args);
@@ -496,7 +555,7 @@ interface.prototype.interpretCommand = function(command) {
           this.saveConfig();
           break; 
         default:
-			this.chatPrint('Unknown command: ' + cmd + ' ' + arg1 + ' ' + arg2 + " Please type {white-fg}/help{/white-fg} for a list of commands.", 'log');
+			this.chatPrint('Unknown command: ' + cmd + ' ' + arg1 + ' ' + arg2 + " Please type {cyan-fg}/help{/cyan-fg} for a list of commands.", 'log');
       }
       this.input();
       break;
@@ -563,12 +622,12 @@ interface.prototype.interpretCommand = function(command) {
           }
           break;
         default:
-			this.chatPrint('Unknown command: ' + cmd + ' ' + arg1 + ' ' + arg2 + " Please type {white-fg}/help{/white-fg} for a list of commands.", 'log');
+          this.chatPrint('Unknown command: ' + cmd + ' ' + arg1 + ' ' + arg2 + " Please type {cyan-fg}/help{/cyan-fg} for a list of commands.", 'log');
       }
       this.input();
       break;
 		default: 
-			this.chatPrint('Unknown command: ' + cmd + " Please type {white-fg}/help{/white-fg} for a list of commands.", 'log');
+			this.chatPrint('Unknown command: ' + cmd + " Please type {cyan-fg}/help{/cyan-fg} for a list of commands.", 'log');
       this.input();
 	}
 };
@@ -602,7 +661,7 @@ interface.prototype.saveConfig = function(type) {
 
 interface.prototype.statusUpdate = function(call) {
 	var type = call.substring(0,1),
-	arg = call.substring(1);
+    arg = call.substring(1);
 	switch(type) {
 		case 't': //time
 			this.session.status[0] = ' {cyan-fg}[{/cyan-fg}' + arg + '{cyan-fg}]{/cyan-fg}';
