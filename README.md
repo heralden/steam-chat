@@ -16,3 +16,16 @@ npm start
 ```
 
 Follow the on-screen instructions to input your login credentials and connect to the Steam network.
+
+# Keybindings
+
+Edit the `keys.js` file if you wish to customize the keybindings. By default, the following keybindings are assigned:
+
+- `pageup, M-v: scrollb`
+- `pagedown, C-v: scrollf`
+- `M-w: part`
+- `M-g: games`
+- `M-1: w 1`
+- `M-2: w 2`
+- ...
+- `M-9: w 9`
