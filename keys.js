@@ -18,6 +18,9 @@ keys.prototype.listen = function() {
   this.interface.inputBar.key(['M-w'], function(ch, key) {
     this.interface.interpretCommand('part');
   }.bind(this))
+  this.interface.inputBar.key(['M-g'], function(ch, key) {
+    this.interface.interpretCommand('games');
+  }.bind(this))
 
   this.interface.inputBar.key(['M-1'], function(ch, key) {
     this.interface.interpretCommand('w 1');

@@ -15,7 +15,9 @@ function interface() {
 
   this.session = {
     currentChat: 0,
+    currentList: 0, // 0-friends, 1-group, 2-games
     lastChat: 0,
+    lastList: 0,
     chat: [],
     status: ['','','','',''],
     unread: [],
@@ -190,15 +192,26 @@ interface.prototype.resizeChat = function(ID) {
 
 interface.prototype.switchChat = function(targetChat) {
   if (this.session[targetChat] !== undefined) {
+
+    if (targetChat.length == 18) {
+      this.session.currentList = 1;
+    } else {
+      this.session.currentList = 0;
+    }
+
     this.session.lastChat = this.session.currentChat;
+
     this.session.currentChat = this.session.chat.indexOf(targetChat);
     this.session[targetChat].setFront();
     this.screen.render();
+
     this.statusUpdate('w' + this.session.chat.indexOf(targetChat));
     this.statusUpdate('p' + targetChat);
+
     process.nextTick(function() {
       this.statusUpdate('c' + targetChat);
     }.bind(this));
+
     this.updateList();
   }
 };
@@ -329,7 +342,7 @@ interface.prototype.interpretCommand = function(command) {
           this.chatPrint(cmd + ": Error: Nothing to confirm.", 'log');
         }
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
       }
       this.input();
       break;
@@ -395,7 +408,7 @@ interface.prototype.interpretCommand = function(command) {
         this.input();
       }
     } else {
-      this.chatPrint(this.doc.cmd.notConnected, 'log');
+      this.chatPrint(this.doc.msg.notConnected, 'log');
       this.input();
     }
     break;
@@ -413,7 +426,7 @@ interface.prototype.interpretCommand = function(command) {
           this.chatPrint(cmd + ": Error: You haven't been invited to a chatroom.", 'log');
         }
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
       }
       this.input();
       break;
@@ -425,7 +438,7 @@ interface.prototype.interpretCommand = function(command) {
           this.chatPrint('Invalid command: ' + cmd + ': Please enter a new username.', 'log');
         }
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
       }
       this.input();
 			break;
@@ -443,7 +456,7 @@ interface.prototype.interpretCommand = function(command) {
           }
         }
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
       }
       this.input();
       break;
@@ -464,11 +477,15 @@ interface.prototype.interpretCommand = function(command) {
           }
         }.bind(this));
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
         this.input();
       }
       break;
 		case 'pm':
+      if (this.session.currentList == 2) {
+        this.session.currentList = this.session.lastList;
+        this.updateList();
+      }
       if (this.steam.steamClient.connected) {
         this.findFriend(args, function(err, steamID) {
           if (err) {
@@ -484,10 +501,19 @@ interface.prototype.interpretCommand = function(command) {
           }
         }.bind(this));
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
         this.input();
       }
 			break;				
+    case 'games':
+      if (this.session.currentList !== 2) {
+        this.listGames();
+      } else {
+        this.session.currentList = this.session.lastList;
+        this.updateList();
+      }
+      this.input();
+      break;
 		case 'dbgstatusupdate':
 			this.statusUpdate(args);
       this.input();
@@ -497,7 +523,26 @@ interface.prototype.interpretCommand = function(command) {
       this.input();
       break;
     case 'help':
-      this.chatPrint(this.doc.cmd.help, 'log');
+      if (args == "all") {
+        for (var entry in this.doc.help) {
+          if (this.doc.help.hasOwnProperty(entry)) {
+            this.chatPrint("Help: " + this.doc.help[entry], 'log');
+          }
+        }
+      } else if (args) {
+        if (this.doc.help[args] !== undefined) {
+          this.chatPrint("Help: " + this.doc.help[args], 'log');
+        } else {
+          this.chatPrint(this.doc.msg.helpNotExist + args, 'log');
+        }
+      } else {
+        this.chatPrint(this.doc.msg.help, 'log');
+      }
+      this.input();
+      break;
+    case 'cmds':
+      var cmds = Object.keys(this.doc.help).join(", ");
+      this.chatPrint("List of commands: " + "{cyan-fg}" + cmds + "{/cyan-fg}", 'log');
       this.input();
       break;
     case 'block':
@@ -508,7 +553,7 @@ interface.prototype.interpretCommand = function(command) {
           }.bind(this));
         }
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
       }
       this.input();
       break;
@@ -520,7 +565,7 @@ interface.prototype.interpretCommand = function(command) {
           }.bind(this));
         }
       } else {
-        this.chatPrint(this.doc.cmd.notConnected, 'log');
+        this.chatPrint(this.doc.msg.notConnected, 'log');
       }
       this.input();
       break;
@@ -618,7 +663,7 @@ interface.prototype.interpretCommand = function(command) {
               }
             }
           } else {
-            this.chatPrint(this.doc.cmd.notConnected, 'log');
+            this.chatPrint(this.doc.msg.notConnected, 'log');
           }
           break;
         default:
@@ -846,7 +891,7 @@ interface.prototype.findFriend = function(args, callback) {
       }.bind(this));
     }
   } else { // no steam connection
-    callback(this.doc.cmd.notConnected);
+    callback(this.doc.msg.notConnected);
   }
 };
 
@@ -882,73 +927,127 @@ interface.prototype.listSelect = function(names, callback) {
 interface.prototype.updateList = function() {
   this.userWin.setContent('');
 
-  if (this.session.chat[this.session.currentChat].length == 18) { //add && !showFriends
+  if (this.session.currentList == 0) {
+
+    var sortedState = Object.keys(this.session.friends).sort(function(a,b) {
+      if (this.session.friends[b].state == this.session.friends[a].state) {
+        return 0;
+      } else if (this.session.friends[b].state == 0) {
+        return 1;
+      } else if (this.session.friends[a].state == 0) {
+        return -1;
+      } else {
+        return this.session.friends[b].state - this.session.friends[a].state;
+      }
+    }.bind(this));
+
+    sortedState.forEach(function(steamID) {
+      var partner = this.session.friends[steamID];
+      switch(partner.state) {
+        case 0: //offline
+          this.userWin.insertTop('{gray-fg}' + partner.name + '{/gray-fg}');
+          break;
+        case 1: //online
+          if (partner.game.length > 0) {
+            this.userWin.insertTop('{green-fg}' + partner.name + '{/green-fg}');
+          } else {
+            this.userWin.insertTop('{blue-fg}' + partner.name + '{/blue-fg}');
+          }
+          break;
+        case 2: //busy
+          this.userWin.insertTop('{red-fg}' + partner.name + '{/red-fg}');
+          break;
+        case 3: //away
+          this.userWin.insertTop('{yellow-fg}' + partner.name + '{/yellow-fg}');
+          break;
+        case 4: //snooze
+          this.userWin.insertTop('{white-fg}' + partner.name + '{/white-fg}');
+          break;
+        default: 
+          this.userWin.insertTop('{cyan-fg}' + partner.name + '{/cyan-fg}');
+          if (this.session.debug) this.chatPrint("DBG: updateFriends function: Undefined state: " + partner.state, 'log');
+      }
+    }.bind(this));
+
+  } else if (this.session.currentList == 1) {
 
     var chatID = this.session.chat[this.session.currentChat];
 
-    for (var i = 4; i > 0; i--) {
-      for (var friendID in this.session.groups[chatID]) {
-        if (this.session.groups[chatID].hasOwnProperty(friendID)) {
-          var friend = this.session.groups[chatID][friendID];
-          if (friend.state == i) {
-            switch(i) {
-             case 1: //online
-               this.userWin.insertTop('{blue-fg}' + friend.name + '{/blue-fg}');
-               break;
-             case 2: //busy
-               this.userWin.insertTop('{red-fg}' + friend.name + '{/red-fg}');
-               break;
-             case 3: //away
-               this.userWin.insertTop('{yellow-fg}' + friend.name + '{/yellow-fg}');
-               break;
-             case 4: //snooze
-               this.userWin.insertTop('{white-fg}' + friend.name + '{/white-fg}');
-               break;
-             default: 
-               this.userWin.insertTop('{cyan-fg}' + friend.name + '{/cyan-fg}');
-               if (this.session.debug) this.chatPrint("DBG: updateGroups function: Undefined state: " + friend.state, 'log');
-            }
-          }
-        }
-      }
-    }
+    if (this.session.groups[chatID] !== undefined) {
 
-  } else { // update friends list
+      var sortedState = Object.keys(this.session.groups[chatID]).sort(function(a,b) {
+        return this.session.groups[chatID][b].state - this.session.groups[chatID][a].state;
+      }.bind(this));
 
-    for (var i = 5; i > 0; i--) {
-      if (i == 5) i = 0;
-      for (var friendID in this.session.friends) {
-        if (this.session.friends.hasOwnProperty(friendID)) {
-          var friend = this.session.friends[friendID];
-          if (friend.state == i) {
-            switch(i) {
-             case 0: //offline
-               this.userWin.insertTop('{gray-fg}' + friend.name + '{/gray-fg}');
-               break;
-             case 1: //online
-               this.userWin.insertTop('{blue-fg}' + friend.name + '{/blue-fg}');
-               break;
-             case 2: //busy
-               this.userWin.insertTop('{red-fg}' + friend.name + '{/red-fg}');
-               break;
-             case 3: //away
-               this.userWin.insertTop('{yellow-fg}' + friend.name + '{/yellow-fg}');
-               break;
-             case 4: //snooze
-               this.userWin.insertTop('{white-fg}' + friend.name + '{/white-fg}');
-               break;
-             default: 
-               this.userWin.insertTop('{cyan-fg}' + friend.name + '{/cyan-fg}');
-               if (this.session.debug) this.chatPrint("DBG: updateFriends function: Undefined state: " + friend.state, 'log');
-            }
-          }
+      sortedState.forEach(function(steamID) {
+        var partner = this.session.groups[chatID][steamID];
+        switch(partner.state) {
+          case 1: //online
+           if (partner.game.length > 0) {
+             this.userWin.insertTop('{green-fg}' + partner.name + '{/green-fg}');
+           } else {
+             this.userWin.insertTop('{blue-fg}' + partner.name + '{/blue-fg}');
+           }
+           break;
+         case 2: //busy
+           this.userWin.insertTop('{red-fg}' + partner.name + '{/red-fg}');
+           break;
+         case 3: //away
+           this.userWin.insertTop('{yellow-fg}' + partner.name + '{/yellow-fg}');
+           break;
+         case 4: //snooze
+           this.userWin.insertTop('{white-fg}' + partner.name + '{/white-fg}');
+           break;
+         default: 
+           this.userWin.insertTop('{cyan-fg}' + partner.name + '{/cyan-fg}');
+           if (this.session.debug) this.chatPrint("DBG: updateGroups function: Undefined state: " + partner.state, 'log');
         }
-      }
-      if (i == 0) i = 5;
+      }.bind(this));
     }
+  }
+  this.screen.render();
+};
+
+interface.prototype.listGames = function() {
+  this.userWin.setContent('');
+
+  if (this.session.currentList == 0) {
+
+    var sortedState = Object.keys(this.session.friends).sort(function(a,b) {
+      return this.session.friends[b].state - this.session.friends[a].state;
+    }.bind(this));
+
+    sortedState.forEach(function(steamID) {
+      var partner = this.session.friends[steamID];
+      if (partner.game.length > 0) {
+        this.userWin.insertTop('{green-fg}' + partner.game + '{/green-fg}');
+      } else {
+        this.userWin.insertTop('');
+      }
+    }.bind(this));
+
+  } else if (this.session.currentList == 1) {
+
+    var chatID = this.session.chat[this.session.currentChat];
+    var sortedState = Object.keys(this.session.groups[chatID]).sort(function(a,b) {
+      return this.session.groups[chatID][b].state - this.session.groups[chatID][a].state;
+    }.bind(this));
+
+    sortedState.forEach(function(steamID) {
+      var partner = this.session.groups[chatID][steamID];
+      if (partner.game.length > 0) {
+        this.userWin.insertTop('{green-fg}' + partner.game + '{/green-fg}');
+      } else {
+        this.userWin.insertTop('');
+      }
+    }.bind(this));
+
   }
 
   this.screen.render();
+
+  this.session.lastList = this.session.currentList;
+  this.session.currentList = 2;
 };
 
 interface.prototype.updateGroups = function(chatID) {
