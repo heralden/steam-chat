@@ -1014,7 +1014,15 @@ interface.prototype.listGames = function() {
   if (this.session.currentList == 0) {
 
     var sortedState = Object.keys(this.session.friends).sort(function(a,b) {
-      return this.session.friends[b].state - this.session.friends[a].state;
+      if (this.session.friends[b].state == this.session.friends[a].state) {
+        return 0;
+      } else if (this.session.friends[b].state == 0) {
+        return 1;
+      } else if (this.session.friends[a].state == 0) {
+        return -1;
+      } else {
+        return this.session.friends[b].state - this.session.friends[a].state;
+      }
     }.bind(this));
 
     sortedState.forEach(function(steamID) {
