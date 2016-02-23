@@ -8,7 +8,7 @@ steam-chat is currently a work-in-progress. The goal is to create a complete rep
 
 # Usage
 
-You will need Node.js and npm (node package manager) installed on your system. Once you have those installed, run the following commands.
+You will need Node.js and npm (node package manager) installed on your system. Once you have those installed, run the following commands inside the directory.
 
 ```
 npm install
