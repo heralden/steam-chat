@@ -523,6 +523,7 @@ interface.prototype.interpretCommand = function(command) {
       this.input();
       break;
     case 'help':
+      args = args.toLowerCase();
       if (args == "all") {
         for (var entry in this.doc.help) {
           if (this.doc.help.hasOwnProperty(entry)) {
