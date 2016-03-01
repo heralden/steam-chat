@@ -18,6 +18,7 @@ function interface() {
     currentList: 0, // 0-friends, 1-group, 2-games
     lastChat: 0,
     lastList: 0,
+    list: [],
     chat: [],
     status: ['','','','',''],
     unread: [],
@@ -483,7 +484,7 @@ interface.prototype.interpretCommand = function(command) {
       }
       break;
 		case 'pm':
-      if (this.session.currentList == 2) {
+      if (this.session.currentList == 2) { // make sure that game userlist isn't active
         this.session.currentList = this.session.lastList;
         this.updateList();
       }
@@ -823,85 +824,70 @@ interface.prototype.sortChatID = function(a, b) {
 };
 
 interface.prototype.findFriend = function(args, callback) {
-  if (this.steam.steamClient.connected) {
-    if (args) {
-      if (args.length == 17 && /7656119.*/.test(args) && this.session.friends.hasOwnProperty(args)) { 
-        callback(null, args);
-        this.input();
-      /*} else if (this.nicks.indexOf(args) > -1) { // nick
-        partner = this.nicks[this.nicks.indexOf(args)];
-        this.chatPrint('FIX: I will now message: ' + partner, 'log');
-        // FIX: Implement nicks
-        this.input();*/
-      } else { // name
-        var res = false;
-        for (var steamID in this.session.friends) {
-          if (this.session.friends.hasOwnProperty(steamID)) {
-            var partner = this.session.friends[steamID];
-            if (partner.name == args) {
-              res = true;
-              callback(null, steamID);
-              this.input();
-              break;
-            }
-          }
-        }
-        if (!res) { // try searching through grouplist
-          for (var chatID in this.session.groups) {
-            if (this.session.groups.hasOwnProperty(chatID)) {
-              for (var steamID in this.session.groups[chatID]) {
-                if (this.session.groups[chatID].hasOwnProperty(steamID)) {
-                  var partner = this.session.groups[chatID][steamID];
-                  if (partner.name == args) {
-                    res = true;
-                    callback(null, steamID);
-                    this.input();
-                    break;
-                  }
-                }
-              }
-            }
-          }
-        }
-        if (!res) {
-          callback("Invalid argument: Argument is not a friends or chat members steam ID or username.");
-        }
-      }
-    } else { // no arg - initiate listselect
-      this.listSelect(null, function(err, item) {
-        if (this.session.chat[this.session.currentChat].length == 18) { // select from grouplist
-          for (var steamID in this.session.groups[this.session.chat[this.session.currentChat]]) {
-            if (this.session.groups[this.session.chat[this.session.currentChat]].hasOwnProperty(steamID)) {
-              var partner = this.session.groups[this.session.chat[this.session.currentChat]][steamID];
-              if (partner.name == item) {
-                callback(null, steamID);
-                break;
-              }
-            }
-          }
-        } else { // select from friendlist
-          for (var steamID in this.session.friends) {
-            if (this.session.friends.hasOwnProperty(steamID)) {
-              var partner = this.session.friends[steamID];
-              if (partner.name == item) {
-                callback(null, steamID);
-                break;
-              }
-            }
-          }
+  
+  if (!this.steam.steamClient.connected) {
+    callback(this.doc.msg.notConnected);
+  } else {
+
+    if (args.length == 17 && /7656119.*/.test(args) && this.session.friends.hasOwnProperty(args)) {
+      callback(null, args);
+      this.input();
+    } else if (args) {
+
+      var res = false;
+      // check if in friends list
+      Object.keys(this.session.friends).some(function(steamID) {
+        if (this.session.friends[steamID].name == args) {
+          callback(null, steamID);
+          this.input();
+          res = true;
+          return true;
         }
       }.bind(this));
+
+      if (!res && this.session.chat[this.session.currentChat].length == 18) { // arg is name in group list
+
+        var chatID = this.session.chat[this.session.currentChat];
+        // check if in group list
+        Object.keys(this.session.groups[chatID]).some(function(steamID) {
+          if (this.session.groups[chatID][steamID].name == args && !res) {
+            callback(null, steamID);
+            this.input();
+            res = true;
+            return true;
+          }
+        }.bind(this));
+
+      }
+
+      if (!res) {
+        callback(this.doc.err.findFriend);
+      }
+
+    } else { // no arg - initiate listSelect
+
+      var names = this.userWin.getContent().split('\n');
+      names.pop();
+
+      var namesText = this.userWin.getText().split('\n');
+      namesText.pop();
+
+      this.listSelect(names, function(err, item) {
+        var reversedList = this.session.list.reverse();
+        var steamID = reversedList[namesText.indexOf(item)];
+        if (steamID !== undefined) {
+          callback(null, steamID);
+        } else {
+          callback("findFriend: Malformed steamID. Please see debug log.");
+          if (this.session.debug) this.chatPrint("DBG: findFriend function: listSelect callback: Undefined steamID: " + steamID, 'log');
+        }
+      }.bind(this));
+
     }
-  } else { // no steam connection
-    callback(this.doc.msg.notConnected);
   }
 };
 
 interface.prototype.listSelect = function(names, callback) {
-  if (names === null) {
-    names = this.userWin.getContent().split('\n');
-    names.pop();
-  }
 	this.friendSelect = this.blessed.list({
 		top: 0,
 		right: 0,
@@ -931,7 +917,7 @@ interface.prototype.updateList = function() {
 
   if (this.session.currentList == 0) {
 
-    var sortedState = Object.keys(this.session.friends).sort(function(a,b) {
+    this.session.list = Object.keys(this.session.friends).sort(function(a,b) {
       if (this.session.friends[b].state == this.session.friends[a].state) {
         return 0;
       } else if (this.session.friends[b].state == 0) {
@@ -943,7 +929,7 @@ interface.prototype.updateList = function() {
       }
     }.bind(this));
 
-    sortedState.forEach(function(steamID) {
+    this.session.list.forEach(function(steamID) {
       var partner = this.session.friends[steamID];
       switch(partner.state) {
         case 0: //offline
@@ -977,11 +963,11 @@ interface.prototype.updateList = function() {
 
     if (this.session.groups[chatID] !== undefined) {
 
-      var sortedState = Object.keys(this.session.groups[chatID]).sort(function(a,b) {
+      this.session.list = Object.keys(this.session.groups[chatID]).sort(function(a,b) {
         return this.session.groups[chatID][b].state - this.session.groups[chatID][a].state;
       }.bind(this));
 
-      sortedState.forEach(function(steamID) {
+      this.session.list.forEach(function(steamID) {
         var partner = this.session.groups[chatID][steamID];
         switch(partner.state) {
           case 1: //online
@@ -1013,46 +999,23 @@ interface.prototype.updateList = function() {
 interface.prototype.listGames = function() {
   this.userWin.setContent('');
 
+  var cursor;
+
   if (this.session.currentList == 0) {
-
-    var sortedState = Object.keys(this.session.friends).sort(function(a,b) {
-      if (this.session.friends[b].state == this.session.friends[a].state) {
-        return 0;
-      } else if (this.session.friends[b].state == 0) {
-        return 1;
-      } else if (this.session.friends[a].state == 0) {
-        return -1;
-      } else {
-        return this.session.friends[b].state - this.session.friends[a].state;
-      }
-    }.bind(this));
-
-    sortedState.forEach(function(steamID) {
-      var partner = this.session.friends[steamID];
-      if (partner.game.length > 0) {
-        this.userWin.insertTop('{green-fg}' + partner.game + '{/green-fg}');
-      } else {
-        this.userWin.insertTop('');
-      }
-    }.bind(this));
-
+    cursor = this.session.friends;
   } else if (this.session.currentList == 1) {
-
     var chatID = this.session.chat[this.session.currentChat];
-    var sortedState = Object.keys(this.session.groups[chatID]).sort(function(a,b) {
-      return this.session.groups[chatID][b].state - this.session.groups[chatID][a].state;
-    }.bind(this));
-
-    sortedState.forEach(function(steamID) {
-      var partner = this.session.groups[chatID][steamID];
-      if (partner.game.length > 0) {
-        this.userWin.insertTop('{green-fg}' + partner.game + '{/green-fg}');
-      } else {
-        this.userWin.insertTop('');
-      }
-    }.bind(this));
-
+    cursor = this.session.groups[chatID];
   }
+
+ this.session.list.forEach(function(steamID) {
+    var partner = cursor[steamID];
+    if (partner.game.length > 0) {
+      this.userWin.insertTop('{green-fg}' + partner.game + '{/green-fg}');
+    } else {
+      this.userWin.insertTop('');
+    }
+  }.bind(this));
 
   this.screen.render();
 
