@@ -226,27 +226,28 @@ interface.prototype.input = function() {
     } else {
       this.inputBar.clearValue();
       this.input();
+
       if (this.session.currentChat == 0) {
         this.chatPrint(text, this.session.chat[this.session.currentChat]);
       } else if (this.steam.steamClient.connected) {
+
+        var user = 'undefined';
+        if (this.steam.steamFriends.personaStates.hasOwnProperty(this.steam.steamClient.steamID)) {
+          var user = this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name;
+        }
+
         if (this.session.chat[this.session.currentChat].length == 18) { 
+
           if (this.steam.steamFriends.chatRooms.hasOwnProperty(this.session.chat[this.session.currentChat])) {
             this.steam.steamFriends.sendMessage(this.session.chat[this.session.currentChat], text);
-            if (this.steam.steamFriends.personaStates.hasOwnProperty(this.steam.steamClient.steamID)) {
-              this.chatPrint(this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name + ': ' + text, this.session.chat[this.session.currentChat]);
-            } else {
-              this.chatPrint('undefined: ' + text, this.session.chat[this.session.currentChat]);
-            }
+            this.chatPrint('{blue-fg}' + user + '{/blue-fg}: ' + text, this.session.chat[this.session.currentChat]);
           } else {
             this.chatPrint("Error: You are not currently in this group chat.", 'log');
           }
-        } else {
+
+        } else { // chat is a pm
           this.steam.steamFriends.sendMessage(this.session.chat[this.session.currentChat], text);
-          if (this.steam.steamFriends.personaStates.hasOwnProperty(this.steam.steamClient.steamID)) {
-            this.chatPrint(this.steam.steamFriends.personaStates[this.steam.steamClient.steamID].player_name + ': ' + text, this.session.chat[this.session.currentChat]);
-          } else {
-            this.chatPrint('undefined: ' + text, this.session.chat[this.session.currentChat]);
-          }
+          this.chatPrint('{blue-fg}' + user + '{/blue-fg}: ' + text, this.session.chat[this.session.currentChat]);
         }
       } else {
         this.chatPrint("Error: No connection with Steam.", 'log');
@@ -263,7 +264,7 @@ interface.prototype.currentTime = function() {
 };
 
 interface.prototype.chatPrint = function(text, targetChat) {
-  this.session[targetChat].add(this.currentTime() + ' - ' + text);
+  this.session[targetChat].add('{blue-fg}' + this.currentTime() + ' - {/blue-fg}' + text);
   if (this.session.currentChat !== this.session.chat.indexOf(targetChat)) {
     if (targetChat.toString().length == 17) { 
       this.statusUpdate('v' + this.session.chat.indexOf(targetChat));

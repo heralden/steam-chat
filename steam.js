@@ -219,7 +219,11 @@ steamChatClient.prototype.listen = function() {
       this.interface.buildChat(steamID);
     }
     if (msg.length > 0) { //prevents blank messages since friendMsg emits when user is typing
-      this.interface.chatPrint(user + ': ' + msg, steamID);
+      if (this.steamFriends.personaStates[steamID].game_name.length > 0) {
+        this.interface.chatPrint('{green-fg}' + user + '{/green-fg}: ' + msg, steamID);
+      } else {
+        this.interface.chatPrint('{blue-fg}' + user + '{/blue-fg}: ' + msg, steamID);
+      }
     }
   }.bind(this));
 
@@ -234,7 +238,11 @@ steamChatClient.prototype.listen = function() {
     if (this.interface.session.chat.indexOf(chatID) < 0) {
       this.interface.buildChat(chatID);
     }
-    this.interface.chatPrint(user + ': ' + msg, chatID);
+    if (this.steamFriends.personaStates[steamID].game_name.length > 0) {
+      this.interface.chatPrint('{green-fg}' + user + '{/green-fg}: ' + msg, chatID);
+    } else {
+      this.interface.chatPrint('{blue-fg}' + user + '{/blue-fg}: ' + msg, chatID);
+    }
   }.bind(this))
 
   this.steamFriends.on('personaState', function(friend) {
@@ -292,30 +300,30 @@ steamChatClient.prototype.listen = function() {
       process.nextTick(function() { this.interface.updateGroups(chatID); }.bind(this));
       switch(MemberStateChange) {
         case this.Steam.EChatMemberStateChange.Entered:
-          this.interface.chatPrint('{blue-fg}' + user + '{/blue-fg} joined chat.', chatID);
+          this.interface.chatPrint(user + ' entered chat.', chatID);
           break;
         case this.Steam.EChatMemberStateChange.Left:
-          this.interface.chatPrint('{blue-fg}' + user + '{/blue-fg} left chat.', chatID);
+          this.interface.chatPrint(user + ' left chat.', chatID);
           break;
         case this.Steam.EChatMemberStateChange.Disconnected:
-          this.interface.chatPrint('{blue-fg}' + user + '{/blue-fg} disconnected.', chatID);
+          this.interface.chatPrint(user + ' disconnected.', chatID);
           break;
         case this.Steam.EChatMemberStateChange.Kicked:
           if (steamID == this.steamClient.steamID) {
-            this.interface.chatPrint('You have been kicked by {blue-fg}' + actor + '{/blue-fg}.', chatID);
+            this.interface.chatPrint('You have been kicked by ' + actor + '.', chatID);
           } else if (actorID == this.steamClient.steamID) {
-            this.interface.chatPrint('You have kicked {blue-fg}' + user + '{/blue-fg}.', chatID);
+            this.interface.chatPrint('You have kicked ' + user + '.', chatID);
           } else {
-            this.interface.chatPrint('{blue-fg}' + user + '{/blue-fg} has been kicked by {blue-fg}' + actor + '{/blue-fg}.', chatID);
+            this.interface.chatPrint(user + ' has been kicked by ' + actor + '.', chatID);
           }
           break;
         case this.Steam.EChatMemberStateChange.Banned:
           if (steamID == this.steamClient.steamID) {
-            this.interface.chatPrint('You have been banned by {blue-fg}' + actor + '{/blue-fg}.', chatID);
+            this.interface.chatPrint('You have been banned by ' + actor + '.', chatID);
           } else if (actorID == this.steamClient.steamID) {
-            this.interface.chatPrint('You have banned {blue-fg}' + user + '{/blue-fg}.', chatID);
+            this.interface.chatPrint('You have banned ' + user + '.', chatID);
           } else {
-            this.interface.chatPrint('{blue-fg}' + user + '{/blue-fg} has been banned by {blue-fg}' + actor + '{/blue-fg}.', chatID);
+            this.interface.chatPrint(user + ' has been banned by ' + actor + '.', chatID);
           }
           break;
       }
