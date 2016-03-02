@@ -206,7 +206,8 @@ steamChatClient.prototype.connect = function() {
       this.interface.chatPrint("Error: Invalid username or password. Please set your login information correctly and run {cyan-fg}/connect{/cyan-fg}.", 'log');
     }
   } else {
-    this.interface.chatPrint("Warning: Username and password not defined. Please run the {cyan-fg}/set username YOUR_NAME{/cyan-fg} and {cyan-fg}/set password YOUR_PASSWORD{/cyan-fg} commands with your credentials as arguments, then run {cyan-fg}/connect{/cyan-fg}. Use {cyan-fg}/saveconfig{/cyan-fg} if you wish to save your login information. For documentation, use the {cyan-fg}/help{/cyan-fg} command.", 'log'); }
+    this.interface.chatPrint("Warning: Username and password not defined. Please run the {cyan-fg}/set username YOUR_NAME{/cyan-fg} and {cyan-fg}/set password YOUR_PASSWORD{/cyan-fg} commands with your credentials as arguments, then run {cyan-fg}/connect{/cyan-fg}. Use {cyan-fg}/saveconfig{/cyan-fg} if you wish to save your login information. For documentation, use the {cyan-fg}/help{/cyan-fg} command.", 'log'); 
+  }
 };
 
 steamChatClient.prototype.listen = function() { 
