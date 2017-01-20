@@ -1,13 +1,11 @@
-var winston = require('winston');
 var sinon = require('sinon');
 
-var logger = require('../lib/logger.js');
-var config = require('../lib/config.js');
+var logger = require('../lib/logger');
 
-var steam = require('../lib/steam/steam.js');
-var ui = require('../lib/ui/ui.js');
+var steam = require('../lib/steam/steam')
+  , ui = require('../lib/ui/ui');
 
-logger.transports.customLogger.level = "debug";
+logger.transports.console.level = 'debug';
 
 sinon.stub(ui, "disconnected", () => {
     console.log("disconnected");
@@ -37,4 +35,9 @@ sinon.stub(ui, "activity", () => {
     console.log("activity");
 });
 
-setTimeout(() => { steam.steamClient.disconnect() }, 30*1000);
+logger.log('error', 'error');
+logger.log('warn', 'warn');
+logger.log('info', 'info');
+logger.log('verbose', 'verbose');
+logger.log('debug', 'debug');
+logger.log('silly', 'silly');

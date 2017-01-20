@@ -1,0 +1,7 @@
+{
+    "pageup": "scrollb",
+    "M-v": "scrollb",
+    "pagedown": "scrollf",
+    "C-v": "scrollf",
+    "C-c": "quit"
+}

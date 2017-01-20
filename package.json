@@ -18,7 +18,8 @@
     "node": ">=4.1.1"
   },
   "scripts": {
-    "test": "node tests/steam_test.js"
+    "test-steam": "node tests/steam_test.js",
+    "test-ui": "node tests/ui_test.js"
   },
   "keywords": [
     "steam",
