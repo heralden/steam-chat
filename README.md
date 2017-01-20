@@ -10,7 +10,7 @@ steam-chat is currently a work-in-progress. The goal is to create a complete rep
 
 steam-chat has been completely rewritten from scratch. If you're using a prior version, do not update with `git pull`, instead delete the directory and run a new `git clone` followed by `npm install`.
 
-Note: While this version is not part of the main branch, it is still under development. As of the first commit, only `npm test` works.
+Note: While this version is not part of the main branch, it is still under development. As of the first commit, only the tests work.
 
 # Usage
 
