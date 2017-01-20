@@ -298,8 +298,8 @@ interface.prototype.interpretCommand = function(command) {
       if (this.util === undefined) {
         this.util = require('util');
       }
-      fs.writeFile('steamDump.txt', this.util.inspect(this.steam, { depth: null }));
-      fs.chmod('steamDump.txt', 0600);
+      fs.writeFile('steamDump.txt', this.util.inspect(this.steam, { depth: null }), this.fsCallback);
+      fs.chmod('steamDump.txt', 0600, this.fsCallback);
       this.input();
       break;
 		case 'scrollb':
@@ -695,15 +695,15 @@ interface.prototype.saveConfig = function(type) {
     json.userlistwidth = this.userlistwidth;
     json.scrollback = this.scrollback;
     json.autojoin = this.autojoin;
-    fs.writeFile('config.json', JSON.stringify(json));
-    fs.chmod('config.json', 0600);
+    fs.writeFile('config.json', JSON.stringify(json), this.fsCallback);
+    fs.chmod('config.json', 0600, this.fsCallback);
   } else {
     json.sentryauth = this.steam.sentryauth;
     json.userlistwidth = this.userlistwidth;
     json.scrollback = this.scrollback;
     json.autojoin = this.autojoin;
-    fs.writeFile('config.json', JSON.stringify(json));
-    fs.chmod('config.json', 0600);
+    fs.writeFile('config.json', JSON.stringify(json), this.fsCallback);
+    fs.chmod('config.json', 0600, this.fsCallback);
   }
 };
 
@@ -1095,4 +1095,11 @@ interface.prototype.idle = function() {
     }
     this.session.away = true;
   }.bind(this), 600000);
+};
+
+interface.prototype.fsCallback = function(err) {
+  if (err) {
+    if (this.session.debug)
+      this.chatPrint("fs: Failed I/O operation.", 'log');
+  }
 };

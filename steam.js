@@ -137,8 +137,8 @@ function steamChatClient(interface) {
   this.steamUser.on('updateMachineAuth', function(sentry, callback) {
     if (this.interface.session.debug) this.interface.chatPrint("DBG: updateMachineAuth event.", 'log');
 
-    fs.writeFile('sentryfile.' + this.username + '.hash', sentry.bytes, () => {
-      fs.chmod('sentryfile.' + this.username + '.hash', 0600);
+    fs.writeFile('sentryfile.' + this.username + '.hash', sentry.bytes, (err) => {
+      fs.chmod('sentryfile.' + this.username + '.hash', 0600, this.interface.fsCallback);
     });
 
     var sentryHash = crypto.createHash('sha1').update(sentry.bytes).digest();
@@ -193,7 +193,12 @@ function steamChatClient(interface) {
   }.bind(this));
 
   this.steamClient.on('servers', function(servers) {
-    fs.writeFile('servers.json', JSON.stringify(servers));
+    fs.writeFile('servers.json', JSON.stringify(servers), (err) => {
+      if (err) {
+        if (this.interface.session.debug)
+          this.interface.chatPrint("fs: Failed to write servers.json", 'log');
+      }
+    });
   });
 }
 
