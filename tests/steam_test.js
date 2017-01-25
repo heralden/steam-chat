@@ -34,10 +34,3 @@ sinon.stub(ui, "enteredChat", () => {
 sinon.stub(ui, "activity", () => {
     console.log("activity");
 });
-
-logger.log('error', 'error');
-logger.log('warn', 'warn');
-logger.log('info', 'info');
-logger.log('verbose', 'verbose');
-logger.log('debug', 'debug');
-logger.log('silly', 'silly');
