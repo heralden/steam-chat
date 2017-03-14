@@ -4,7 +4,7 @@
   "description": "Simple terminal interface chat client for the Steam network.",
   "author": "Ruby <regen@anche.no>",
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/app.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/rubyconn/steam-chat.git"
