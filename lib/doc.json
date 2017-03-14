@@ -55,6 +55,7 @@
     "guardCode":"Your Steam Guard code must consist of 5 alphanumeric characters. Please enter it correctly with the {cyan-fg}/set guardcode{/cyan-fg} command.",
     "loginInfo":"Invalid username or password. Please set your login information correctly and run {cyan-fg}/connect{/cyan-fg}.",
     "invalidCode":"Specified Steam Guard code is invalid. Clearing guard code. Please reattempt connection with {cyan-fg}/connect{/cyan-fg}.",
-    "loginTimeout":"There have been too many login failures from your network in a short time period. Please wait and try again later."
+    "loginTimeout":"There have been too many login failures from your network in a short time period. Please wait and try again later.",
+    "needTwoFactor":"Your Steam account has Two-Factor Authentication enabled. Please set your Two-Factor code with the {cyan-fg}/set twofactor VALUE{/cyan-fg} command and reconnect."
   }
 }
