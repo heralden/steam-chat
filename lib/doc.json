@@ -46,8 +46,14 @@
     "pendingFriendRequests":"You have pending friend requests. Type {cyan-fg}/accept{/cyan-fg} to cycle through your friend requests and choose which to accept.",
     "bannedFromChat":"You have been banned from the chatroom.",
     "chatInvite":"You have received an invite to {blue-fg}%s{/blue-fg}, by {blue-fg}%s{/blue-fg}. Type {cyan-fg}/join{/cyan-fg} to accept the invite.",
-    "reconnect":"Disconnected from Steam servers. Will attempt to reconnect after %s seconds.",
-    "reconnectLong":"Attempts to reconnect have failed. Will retry after %s minutes."
+    "reconnect":"Disconnected from Steam servers. Will attempt to reconnect after %d seconds.",
+    "reconnectLong":"Attempts to reconnect have failed. Will retry after %d minutes."
+  },
+  "cmd": {
+    "tooManyArguments":"%s: Too many arguments specified.",
+    "notEnoughArguments":"%s: Not enough arguments.",
+    "chatNotExist":"%s: Chat index %s does not exist.",
+    "notNumber":"%s: Argument %s is not a number."
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
