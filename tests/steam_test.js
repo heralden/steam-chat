@@ -7,8 +7,14 @@ var steam = require('../lib/steam/steam')
 
 logger.transports.console.level = 'debug';
 
+sinon.stub(ui, "connected", () => {
+    console.log("connected");
+});
 sinon.stub(ui, "disconnected", () => {
     console.log("disconnected");
+});
+sinon.stub(ui, "updateNick", () => {
+    console.log("updateNick");
 });
 sinon.stub(ui, "rejoinGroupChats", () => {
     console.log("rejoinGroupChats");
@@ -24,9 +30,6 @@ sinon.stub(ui, "message", () => {
 });
 sinon.stub(ui, "groupMessage", () => {
     console.log("groupMessage");
-});
-sinon.stub(ui, "log", (msg) => {
-    console.log("log: " + msg);
 });
 sinon.stub(ui, "enteredChat", () => {
     console.log("enteredChat");

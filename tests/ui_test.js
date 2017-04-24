@@ -1,9 +1,10 @@
 var logger = require('../lib/logger');
 
 var session = require('../lib/app')
-  , base = require('../lib/ui/base');
+  , base = require('../lib/ui/base')
+  , cmd = require('../lib/ui/cmd');
 
-logger.transports.customLogger.level = 'debug';
+cmd(["debug", 2]);
 
 session.users = {
     '92837105728491852': { 
@@ -53,7 +54,6 @@ session.clans = {
         }
     }
 };
-
 
 var userwin = require('../lib/ui/userwin');
 

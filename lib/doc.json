@@ -10,8 +10,7 @@
     "block":"{cyan-fg}/block ID{/cyan-fg} - Add a user to your ignore list.",
     "connect":"{cyan-fg}/connect{/cyan-fg} - Connect to Steam servers. Will reconnect if already connected.",
     "cmds":"{cyan-fg}/cmds{/cyan-fg} - List all available commands. Entries prefixed with 'info' are helpers. For more information use the {cyan-fg}/help{/cyan-fg} command.",
-    "debug":"{cyan-fg}/debug{/cyan-fg} - Toggle debug mode.",
-    "debug_v":"{cyan-fg}/debug_v{/cyan-fg} - Toggle debug verbose mode.",
+    "debug":"{cyan-fg}/debug LEVEL{/cyan-fg} - Set debug level. Debug levels: 0 = off, 1 = verbose, 2 = debug, 3 = silly.",
     "disconnect":"{cyan-fg}/disconnect{/cyan-fg} - Disconnect from Steam servers.",
     "dump":"{cyan-fg}/dump{/cyan-fg} - Take a dump of the Steam object for debugging purposes.",
     "games":"{cyan-fg}/games{/cyan-fg} - Switch userlist window to display what games the users are playing.",
@@ -19,9 +18,10 @@
     "info list":"{yellow-fg}[list]{/yellow-fg} - A list of entries is spawned in the userlist window. Use 'j' and 'k' or the arrow keys to scroll through the items and press 'Enter' to make a selection. Press 'q' if you wish to cancel the selection.",
     "info confirm":"{yellow-fg}[confirm]{/yellow-fg} - You will be asked to confirm with the {cyan-fg}/yes{/cyan-fg} or {cyan-fg}/no{/cyan-fg} commands. (you may also use {cyan-fg}/y{/cyan-fg} or {cyan-fg}/n{/cyan-fg})",
     "join":"{cyan-fg}/join [chatID]{/cyan-fg} - Arg: Join specified chat room. No arg: Join the chat room you were last invited to.",
+    "logfile":"{cyan-fg}/logfile TRUE|FALSE [LEVEL]{/cyan-fg} - Enable or disable logging to file. You can specify a logging level with the second argument. Logging levels: 0 = error, 1 = warn, 2 = info (default), 3 = verbose, 4 = debug, 5 = silly.",
     "part":"{cyan-fg}/part{/cyan-fg} - Leave the chat or PM and close the window.",
     "persona":"{cyan-fg}/persona NAME{/cyan-fg} - Change your username.",
-    "pm":"{cyan-fg}/pm [username | ID]{/cyan-fg} - Arg: Start a conversation with the user with the following username or Steam ID. No arg: Select a user in your friends list to message. {yellow-fg}[list]{/yellow-fg}",
+    "pm":"{cyan-fg}/pm [username|ID]{/cyan-fg} - Arg: Start a conversation with the user with the following username or Steam ID. No arg: Select a user in your friends list to message. {yellow-fg}[list]{/yellow-fg}",
     "quit":"{cyan-fg}/quit{/cyan-fg} - Close this program.",
     "remove":"{cyan-fg}/remove [username | ID]{/cyan-fg} - Remove a friend from your Steam friends list. {yellow-fg}[list][confirm]{/yellow-fg}",
     "saveconfig":"{cyan-fg}/saveconfig{/cyan-fg} - Save your login credentials to 'config.json'. Warning: Stored in plain-text.",
@@ -52,8 +52,11 @@
   "cmd": {
     "tooManyArguments":"%s: Too many arguments specified.",
     "notEnoughArguments":"%s: Not enough arguments.",
+    "notNumber":"%s: Argument %s is not a number.",
     "chatNotExist":"%s: Chat index %s does not exist.",
-    "notNumber":"%s: Argument %s is not a number."
+    "invalidDebugLevel":"%s: Please enter a debug level between 0 and 3.",
+    "invalidLogFileLevel":"%s: %s: Please enter a logging level between 0 and 5.",
+    "invalidBoolean":"%s: %s: Please specify either true or false."
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
