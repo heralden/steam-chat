@@ -1,7 +1,7 @@
 var logger = require('../lib/logger');
 
 var session = require('../lib/app')
-  , base = require('../lib/ui/base')
+  , ui = require('../lib/ui/ui')
   , cmd = require('../lib/ui/cmd');
 
 cmd(["debug", 2]);
