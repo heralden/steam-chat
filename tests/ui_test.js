@@ -2,7 +2,8 @@ var logger = require('../lib/logger');
 
 var session = require('../lib/app')
   , ui = require('../lib/ui/ui')
-  , cmd = require('../lib/ui/cmd');
+  , cmd = require('../lib/ui/cmd')
+  , steam = require('../lib/steam/steam');
 
 cmd(["debug", 2]);
 
@@ -59,8 +60,15 @@ var userwin = require('../lib/ui/userwin');
 
 setTimeout(() => {
     userwin.updateFriend();
+    steam.emit(
+        'message', 
+        "92837105728491852",
+        "Gabe Newell",
+        "online",
+        "ping"
+    );
 }, 500);
 
 setTimeout(() => {
     userwin.updateGroup('8294721957374875');
-}, 5000);
+}, 2000);
