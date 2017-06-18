@@ -3,4 +3,5 @@ node_modules
 config.json
 servers.json
 /sentryfile*
+/steam-chat.log
 TODO
