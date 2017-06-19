@@ -50,8 +50,8 @@
     "reconnectLong":"Attempts to reconnect have failed. Will retry after %d minutes."
   },
   "cmd": {
-    "tooManyArguments":"%s: Too many arguments specified.",
-    "notEnoughArguments":"%s: Not enough arguments.",
+    "wrongArgumentLength":"%s: Incorrect amount of arguments. Should be %s.",
+    "argumentsNotInRange":"%s: Incorrect amount of arguments. Should be between %s and %s.",
     "notNumber":"%s: Argument %s is not a number.",
     "chatNotExist":"%s: Chat index %s does not exist.",
     "invalidDebugLevel":"%s: Please enter a debug level between 0 and 3.",
