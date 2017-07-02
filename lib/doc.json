@@ -60,7 +60,8 @@
     "setLoggingLevel":"%s: Debug level successfully set to %s.",
     "switchChat":"%s: Chat window has been switched to %s.",
     "logFileEnable":"Logging to file has been enabled at level %s.",
-    "logFileDisable":"Logging to file has been disabled."
+    "logFileDisable":"Logging to file has been disabled.",
+    "unableToLeaveChat":"%s: Unable to leave chat as you are currently not connected to Steam."
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
