@@ -44,6 +44,8 @@
     "reconnectAttempt":"Attempting to reconnect...",
     "friendRequest":"You have received a friend request from {blue-fg}%s{/blue-fg}. Type {cyan-fg}/accept{/cyan-fg} to cycle through your friend requests and choose which to accept.",
     "pendingFriendRequests":"You have pending friend requests. Type {cyan-fg}/accept{/cyan-fg} to cycle through your friend requests and choose which to accept.",
+    "noPendingFriendRequests":"%s: You don't have any pending friend requests.",
+    "acceptedFriendRequest":"%s: Accepted friend request from {blue-fg}%s{/blue-fg}.",
     "bannedFromChat":"You have been banned from the chatroom.",
     "chatInvite":"You have received an invite to {blue-fg}%s{/blue-fg}, by {blue-fg}%s{/blue-fg}. Type {cyan-fg}/join{/cyan-fg} to accept the invite.",
     "reconnect":"Disconnected from Steam servers. Will attempt to reconnect after %d seconds.",
