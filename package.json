@@ -4,7 +4,7 @@
   "description": "Simple terminal interface chat client for the Steam network.",
   "author": "Ruby <regen@anche.no>",
   "license": "MIT",
-  "main": "lib/app.js",
+  "main": "lib/ui/ui.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/rubyconn/steam-chat.git"
@@ -19,8 +19,9 @@
     "node": ">=4.1.1"
   },
   "scripts": {
-    "test-steam": "node tests/steam_test.js",
-    "test-ui": "node tests/ui_test.js"
+    "test": "mocha --no-exit test/*.test.js",
+    "test-steam": "node test/steam.js",
+    "test-ui": "node test/ui.js"
   },
   "keywords": [
     "steam",
@@ -30,6 +31,7 @@
     "curses"
   ],
   "devDependencies": {
-    "sinon": "^1.17.6"
+    "mocha": "^3.5.0",
+    "sinon": "^1.17.7"
   }
 }
