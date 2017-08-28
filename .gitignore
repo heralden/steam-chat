@@ -5,3 +5,4 @@ servers.json
 /sentryfile*
 /steam-chat.log
 TODO
+.*.swp
