@@ -1,11 +1,11 @@
 var logger = require('../lib/logger')
   , session = require('../lib/app');
 
-var scc = require('../lib/ui/ui');
+var ui = require('../lib/ui/ui');
 
-scc.init();
+ui.init();
 
-scc.cmd(["debug", 2]);
+ui.cmd(["debug", 2]);
 
 session.users = {
     '92837105728491852': { 
@@ -57,8 +57,8 @@ session.clans = {
 };
 
 setTimeout(() => {
-    scc.userwin.updateFriend();
-    scc.steam.emit(
+    ui.userwin.updateFriend();
+    ui.steam.emit(
         'message', 
         "92837105728491852",
         "Gabe Newell",
@@ -68,5 +68,5 @@ setTimeout(() => {
 }, 500);
 
 setTimeout(() => {
-    scc.userwin.updateGroup('8294721957374875');
+    ui.userwin.updateGroup('8294721957374875');
 }, 2000);
