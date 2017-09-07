@@ -4,8 +4,7 @@ var assert = require('assert')
 var logger = require('../lib/logger')
   , session = require('../lib/app');
 
-var scc = require('../lib/ui/ui');
-var cmd = require('../lib/ui/cmd');
+var ui = require('../lib/ui/ui');
 
 describe('command', function() {
 
@@ -15,44 +14,44 @@ describe('command', function() {
         const invalidChatId = "12345678901234567";
 
         before(function() {
-            sinon.stub(scc.steam.friends, 'joinChat');
+            sinon.stub(ui.steam.friends, 'joinChat');
             sinon.spy(logger, 'log');
         });
 
         after(function() {
-            scc.steam.friends.joinChat.restore();
+            ui.steam.friends.joinChat.restore();
             logger.log.restore();
         });
 
         it('should join with argument if valid', function() {
             session.connected = true;
-            cmd(['join', validChatId]);
-            assert(scc.steam.friends.joinChat.calledWith(validChatId));
+            ui.cmd(['join', validChatId]);
+            assert(ui.steam.friends.joinChat.calledWith(validChatId));
         });
 
         it('should join with lastInvite if no argument', function() {
             session.connected = true;
             session.lastInvite = validChatId;
-            cmd(['join']);
-            assert(scc.steam.friends.joinChat.calledWith(validChatId));
+            ui.cmd(['join']);
+            assert(ui.steam.friends.joinChat.calledWith(validChatId));
         });
 
         it('should fail when not connected', function() {
             session.connected = false;
-            cmd(['join']);
+            ui.cmd(['join']);
             assert(logger.log.calledWith('warn'));
         });
 
         it('should fail if argument is invalid', function() {
             session.connected = true;
-            cmd(['join', invalidChatId]);
+            ui.cmd(['join', invalidChatId]);
             assert(logger.log.calledWith('warn'));
         });
 
         it('should fail if no argument and lastInvite is invalid', function() {
             session.connected = true;
             session.lastInvite = invalidChatId;
-            cmd(['join']);
+            ui.cmd(['join']);
             assert(logger.log.calledWith('warn'));
         });
 
