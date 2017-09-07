@@ -1,10 +1,11 @@
 var assert = require('assert')
   , sinon = require('sinon');
 
-var session = require('../lib/app')
-  , steam = require('../lib/steam/steam')
-  , logger = require('../lib/logger')
-  , cmd = require('../lib/ui/cmd');
+var logger = require('../lib/logger')
+  , session = require('../lib/app');
+
+var scc = require('../lib/ui/ui');
+var cmd = require('../lib/ui/cmd');
 
 describe('command', function() {
 
@@ -14,26 +15,26 @@ describe('command', function() {
         const invalidChatId = "12345678901234567";
 
         before(function() {
-            sinon.stub(steam.friends, 'joinChat');
+            sinon.stub(scc.steam.friends, 'joinChat');
             sinon.spy(logger, 'log');
         });
 
         after(function() {
-            steam.friends.joinChat.restore();
+            scc.steam.friends.joinChat.restore();
             logger.log.restore();
         });
 
         it('should join with argument if valid', function() {
             session.connected = true;
             cmd(['join', validChatId]);
-            assert(steam.friends.joinChat.calledWith(validChatId));
+            assert(scc.steam.friends.joinChat.calledWith(validChatId));
         });
 
         it('should join with lastInvite if no argument', function() {
             session.connected = true;
             session.lastInvite = validChatId;
             cmd(['join']);
-            assert(steam.friends.joinChat.calledWith(validChatId));
+            assert(scc.steam.friends.joinChat.calledWith(validChatId));
         });
 
         it('should fail when not connected', function() {
@@ -58,4 +59,3 @@ describe('command', function() {
     });
 
 });
-

@@ -1,11 +1,11 @@
-var logger = require('../lib/logger');
+var logger = require('../lib/logger')
+  , session = require('../lib/app');
 
-var session = require('../lib/app')
-  , ui = require('../lib/ui/ui')
-  , cmd = require('../lib/ui/cmd')
-  , steam = require('../lib/steam/steam');
+var scc = require('../lib/ui/ui');
 
-cmd(["debug", 2]);
+scc.init();
+
+scc.cmd(["debug", 2]);
 
 session.users = {
     '92837105728491852': { 
@@ -56,11 +56,9 @@ session.clans = {
     }
 };
 
-var userwin = require('../lib/ui/userwin');
-
 setTimeout(() => {
-    userwin.updateFriend();
-    steam.emit(
+    scc.userwin.updateFriend();
+    scc.steam.emit(
         'message', 
         "92837105728491852",
         "Gabe Newell",
@@ -70,5 +68,5 @@ setTimeout(() => {
 }, 500);
 
 setTimeout(() => {
-    userwin.updateGroup('8294721957374875');
+    scc.userwin.updateGroup('8294721957374875');
 }, 2000);
