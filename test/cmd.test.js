@@ -15,7 +15,7 @@ describe('command', function() {
 
         before(function() {
             sinon.stub(ui.steam.friends, 'joinChat');
-            sinon.spy(logger, 'log');
+            sinon.stub(logger, 'log');
         });
 
         after(function() {
@@ -52,6 +52,34 @@ describe('command', function() {
             session.connected = true;
             session.lastInvite = invalidChatId;
             ui.cmd(['join']);
+            assert(logger.log.calledWith('warn'));
+        });
+
+    });
+
+    describe('/persona', function() {
+
+        const validPersona = "gnewell";
+
+        before(function() {
+            sinon.stub(ui.steam.friends, 'setPersonaName');
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            ui.steam.friends.setPersonaName.restore();
+            logger.log.restore();
+        });
+
+        it('should set persona name if valid', function() {
+            session.connected = true;
+            ui.cmd(['persona', validPersona]);
+            assert(ui.steam.friends.setPersonaName.calledWith(validPersona));
+        });
+
+        it('should fail if no argument', function() {
+            session.connected = true;
+            ui.cmd(['persona']);
             assert(logger.log.calledWith('warn'));
         });
 
