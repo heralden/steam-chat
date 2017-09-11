@@ -19,7 +19,7 @@
     "node": ">=4.1.1"
   },
   "scripts": {
-    "test": "mocha --no-exit test/*.test.js",
+    "test": "mocha test/*.test.js",
     "test-steam": "node test/test-steam.js",
     "test-ui": "node test/test-ui.js"
   },
