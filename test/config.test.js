@@ -1,23 +1,12 @@
 var assert = require('assert')
-  , path = require('path')
   , fs = require('fs')
   , sinon = require('sinon');
+
+var { pathTestConfig, rmFiles } = require('./helpers');
 
 var logger = require('../lib/logger');
 
 var config = require('../lib/config');
-
-function pathTestConfig(filename) {
-    return path.join(__dirname, '..', 'test', filename);
-}
-
-function rmFiles(...args) {
-    args.forEach(file => {
-        fs.unlink(file, err => {
-            if (err) throw err;
-        });
-    });
-}
 
 describe('Config', function() {
 
@@ -26,11 +15,13 @@ describe('Config', function() {
 
     before(function() {
         sinon.stub(logger, 'log');
+        this.prevPath = config.configFile;
     });
 
     after(function() {
         logger.log.restore();
         rmFiles(testPath, newTestPath);
+        config.setPath(this.prevPath);
     });
 
     it('should correctly set path', function() {
