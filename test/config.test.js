@@ -15,7 +15,7 @@ describe('Config', function() {
 
     before(function() {
         sinon.stub(logger, 'log');
-        this.prevPath = config.configFile;
+        this.prevPath = config.getPath();
     });
 
     after(function() {
@@ -26,7 +26,7 @@ describe('Config', function() {
 
     it('should correctly set path', function() {
         config.setPath(testPath);
-        assert.strictEqual(config.configFile, testPath);
+        assert.strictEqual(config.getPath(), testPath);
     });
 
     it('should save values to file', function() {

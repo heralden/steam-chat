@@ -19,7 +19,7 @@ describe('Login', function() {
             logOn: sinon.stub()
         };
         sinon.stub(logger, 'log');
-        this.prevPath = config.configFile;
+        this.prevPath = config.getPath();
         config.setPath(testPath);
     });
 
