@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "blessed": "^0.1.81",
-    "steam": "^1.2.0",
     "crypto": "^0.0.3",
+    "nconf": "^0.8.4",
+    "steam": "^1.2.0",
     "winston": "^2.3.0"
   },
   "engines": {

@@ -31,7 +31,7 @@ describe('Config', function() {
 
     it('should save values to file', function() {
         config.set('username', 'test1');
-        setImmediate(() => {
+        config.save(() => {
             let data = JSON.parse(fs.readFileSync(testPath));
             assert.strictEqual(data.username, 'test1');
         });
@@ -44,14 +44,12 @@ describe('Config', function() {
     });
 
     it('should load existing config files', function() {
-        let data = Object.assign({}, config.config);
+        let data = Object.assign({}, config.get());
         data.username = 'test3';
         fs.writeFileSync(newTestPath, JSON.stringify(data));
         config.setPath(newTestPath);
-        setImmediate(() => {
-            let value = config.get('username');
-            assert.strictEqual(value, 'test3');
-        });
+        let value = config.get('username');
+        assert.strictEqual(value, 'test3');
     });
 
 });
