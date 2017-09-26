@@ -29,11 +29,12 @@ describe('Config', function() {
         assert.strictEqual(config.getPath(), testPath);
     });
 
-    it('should save values to file', function() {
+    it('should save values to file', function(done) {
         config.set('username', 'test1');
         config.save(() => {
             let data = JSON.parse(fs.readFileSync(testPath));
             assert.strictEqual(data.username, 'test1');
+            done();
         });
     });
 
