@@ -9,6 +9,7 @@ var logger = require('../lib/logger')
 var { pathTestConfig, rmFiles } = require('./helpers');
 
 var steamLogin = require('../lib/steam/clientConnectedHandler');
+var updateAuth = require('../lib/steam/userUpdateAuthHandler');
 
 describe('Login', function() {
 
@@ -17,7 +18,8 @@ describe('Login', function() {
     const testTwoFactor = "12345";
     const testGuardCode = "ABCDE";
     const testSentryBytes = "bar";
-    const testSentryFile = pathTestConfig('sentryfile.login_test.hash');
+    const testSentryFile1 = pathTestConfig('sentryfile.login_test1.hash');
+    const testSentryFile2 = pathTestConfig('sentryfile.login_test2.hash');
 
     before(function() {
         this.steamUser = { logOn: sinon.stub() };
@@ -26,7 +28,7 @@ describe('Login', function() {
 
     after(function() {
         logger.log.restore();
-        rmFiles(testSentryFile);
+        rmFiles(testSentryFile1, testSentryFile2);
     });
 
     afterEach(function() {
@@ -90,9 +92,9 @@ describe('Login', function() {
         config.set('username', testUser);
         config.set('password', testPass);
         config.set('sentryauth', true);
-        config.set('sentryfile', testSentryFile);
+        config.set('sentryfile', testSentryFile1);
 
-        fs.writeFileSync(testSentryFile, testSentryBytes);
+        fs.writeFileSync(testSentryFile1, testSentryBytes);
 
         const sentryhash = crypto
             .createHash('sha1').update(testSentryBytes).digest();
@@ -105,6 +107,24 @@ describe('Login', function() {
                     sha_sentryfile: sentryhash
                 })
             ));
+            done();
+        });
+    });
+
+    it('should correctly handle a sentry update', function(done) {
+        config.set('sentryfile', testSentryFile2);
+
+        const sentryhash = crypto
+            .createHash('sha1').update(testSentryBytes).digest();
+
+        updateAuth({ bytes: testSentryBytes }, (sentry) => {
+            assert.deepEqual(sentry.sha_file, sentryhash);
+
+            const sentryfilebytes = fs.readFileSync(testSentryFile2);
+            const sentryfilehash = crypto
+                .createHash('sha1').update(sentryfilebytes).digest();
+
+            assert.deepEqual(sentryfilehash, sentryhash);
             done();
         });
     });
