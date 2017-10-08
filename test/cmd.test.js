@@ -85,4 +85,40 @@ describe('command', function() {
 
     });
 
+    describe('/add', function() {
+
+        const validSteamId = "76561191234567890";
+        const invalidSteamId = "76561181234567890";
+        const invalidSteamIdLength = "7656119123456789";
+
+        before(function() {
+            sinon.stub(ui.steam.friends, 'addFriend');
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            ui.steam.friends.addFriend.restore();
+            logger.log.restore();
+        });
+
+        it('should send a friend request on valid ID', function() {
+            session.connected = true;
+            ui.cmd(['add', validSteamId]);
+            assert(ui.steam.friends.addFriend.calledWith(validSteamId));
+        });
+
+        it('should fail on invalid ID', function() {
+            session.connected = true;
+            ui.cmd(['add', invalidSteamId]);
+            assert(logger.log.calledWith('warn'));
+        });
+
+        it('should fail on invalid ID length', function() {
+            session.connected = true;
+            ui.cmd(['add', invalidSteamIdLength]);
+            assert(logger.log.calledWith('warn'));
+        });
+
+    });
+
 });

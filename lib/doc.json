@@ -66,7 +66,9 @@
     "unableToLeaveChat":"%s: Unable to leave chat as you are currently not connected to Steam.",
     "notChatOrInvite":"%s: You haven't been invited to any chatrooms or specified an invalid Chat ID.",
     "joinChat":"%s: Attempting to join Chat ID %s.",
-    "changedPersona":"%s: Persona has been changed to %s."
+    "changedPersona":"%s: Persona has been changed to %s.",
+    "invalidSteamId":"%s: Invalid Steam ID specified: %s",
+    "addedFriend":"%s: Sent a friend request to %s."
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
