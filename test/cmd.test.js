@@ -6,7 +6,47 @@ var logger = require('../lib/logger')
 
 var ui = require('../lib/ui/ui');
 
-describe('command', function() {
+describe('Commands', function() {
+
+    describe('/add', function() {
+
+        const validSteamId = "76561191234567890";
+        const invalidSteamId = "76561181234567890";
+        const invalidSteamIdLength = "7656119123456789";
+
+        before(function() {
+            sinon.stub(ui.steam.friends, 'addFriend');
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            ui.steam.friends.addFriend.restore();
+            logger.log.restore();
+        });
+
+        afterEach(function() {
+            session.connected = false;
+        });
+
+        it('should send a friend request on valid ID', function() {
+            session.connected = true;
+            ui.cmd(['add', validSteamId]);
+            assert(ui.steam.friends.addFriend.calledWith(validSteamId));
+        });
+
+        it('should fail on invalid ID', function() {
+            session.connected = true;
+            ui.cmd(['add', invalidSteamId]);
+            assert(logger.log.calledWith('warn'));
+        });
+
+        it('should fail on invalid ID length', function() {
+            session.connected = true;
+            ui.cmd(['add', invalidSteamIdLength]);
+            assert(logger.log.calledWith('warn'));
+        });
+
+    });
 
     describe('/join', function() {
 
@@ -21,6 +61,11 @@ describe('command', function() {
         after(function() {
             ui.steam.friends.joinChat.restore();
             logger.log.restore();
+        });
+
+        afterEach(function() {
+            session.connected = false;
+            session.lastInvite = "";
         });
 
         it('should join with argument if valid', function() {
@@ -71,6 +116,10 @@ describe('command', function() {
             logger.log.restore();
         });
 
+        afterEach(function() {
+            session.connected = false;
+        });
+
         it('should set persona name if valid', function() {
             session.connected = true;
             ui.cmd(['persona', validPersona]);
@@ -85,37 +134,60 @@ describe('command', function() {
 
     });
 
-    describe('/add', function() {
+    describe('/pm', function() {
 
-        const validSteamId = "76561191234567890";
-        const invalidSteamId = "76561181234567890";
-        const invalidSteamIdLength = "7656119123456789";
+        const steamId1 = "76561191234567890";
+        const steamId2 = "76561191234567891";
 
         before(function() {
-            sinon.stub(ui.steam.friends, 'addFriend');
+            sinon.stub(ui.chatwin, 'newChat');
+            sinon.stub(ui.chatwin, 'switchChat');
             sinon.stub(logger, 'log');
         });
 
         after(function() {
-            ui.steam.friends.addFriend.restore();
+            ui.chatwin.newChat.restore();
+            ui.chatwin.switchChat.restore();
             logger.log.restore();
         });
 
-        it('should send a friend request on valid ID', function() {
-            session.connected = true;
-            ui.cmd(['add', validSteamId]);
-            assert(ui.steam.friends.addFriend.calledWith(validSteamId));
+        afterEach(function() {
+            session.connected = false;
         });
 
-        it('should fail on invalid ID', function() {
+        it('should work with steamID', function() {
             session.connected = true;
-            ui.cmd(['add', invalidSteamId]);
-            assert(logger.log.calledWith('warn'));
+            session.users = { [steamId1]: {} };
+            ui.cmd(['pm', steamId1]);
+            assert(ui.chatwin.newChat.calledWith(steamId1));
+            assert(ui.chatwin.switchChat.calledWith(steamId1));
         });
 
-        it('should fail on invalid ID length', function() {
+        it('should work with name and prioritize complete match', function() {
             session.connected = true;
-            ui.cmd(['add', invalidSteamIdLength]);
+            session.users = { 
+                [steamId1]: { player_name: "foobark" },
+                [steamId2]: { player_name: "foobar" } 
+            };
+            ui.cmd(['pm', "foobar"]);
+            assert(ui.chatwin.newChat.calledWith(steamId2));
+            assert(ui.chatwin.switchChat.calledWith(steamId2));
+        });
+
+        it('should accept partial match', function() {
+            session.connected = true;
+            session.users = { 
+                [steamId1]: { player_name: "foobar" } 
+            };
+            ui.cmd(['pm', "foo"]);
+            assert(ui.chatwin.newChat.calledWith(steamId1));
+            assert(ui.chatwin.switchChat.calledWith(steamId1));
+        });
+
+        it('should warn on unsuccessful match', function() {
+            session.connected = true;
+            session.users = { [steamId1]: { player_name: "foo" } };
+            ui.cmd(['pm', "bar"]);
             assert(logger.log.calledWith('warn'));
         });
 
