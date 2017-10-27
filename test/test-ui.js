@@ -56,6 +56,8 @@ session.clans = {
     }
 };
 
+session.connected = true;
+
 setTimeout(() => {
     ui.userwin.updateFriend();
     ui.steam.emit(
