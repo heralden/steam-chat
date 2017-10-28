@@ -21,7 +21,7 @@
     "logfile":"{cyan-fg}/logfile TRUE|FALSE [LEVEL]{/cyan-fg} - Enable or disable logging to file. You can specify a logging level with the second argument. Logging levels: 0 = error, 1 = warn, 2 = info (default), 3 = verbose, 4 = debug, 5 = silly.",
     "part":"{cyan-fg}/part{/cyan-fg} - Leave the chat or PM and close the window.",
     "persona":"{cyan-fg}/persona NAME{/cyan-fg} - Change your username.",
-    "pm":"{cyan-fg}/pm [username|ID]{/cyan-fg} - Arg: Start a conversation with the user with the following username or Steam ID. No arg: Select a user in your friends list to message. {yellow-fg}[list]{/yellow-fg}",
+    "pm":"{cyan-fg}/pm [username|ID]{/cyan-fg} - Arg: Start a conversation with the user with the following username (case insensitive and partial match) or Steam ID. No arg: Select a user in your friends list to message. {yellow-fg}[list]{/yellow-fg}",
     "quit":"{cyan-fg}/quit{/cyan-fg} - Close this program.",
     "remove":"{cyan-fg}/remove [username | ID]{/cyan-fg} - Remove a friend from your Steam friends list. {yellow-fg}[list][confirm]{/yellow-fg}",
     "saveconfig":"{cyan-fg}/saveconfig{/cyan-fg} - Save your login credentials to 'config.json'. Warning: Stored in plain-text.",
@@ -68,7 +68,8 @@
     "joinChat":"%s: Attempting to join Chat ID %s.",
     "changedPersona":"%s: Persona has been changed to %s.",
     "invalidSteamId":"%s: Invalid Steam ID specified: %s",
-    "addedFriend":"%s: Sent a friend request to %s."
+    "addedFriend":"%s: Sent a friend request to %s.",
+    "userNotFound":"%s: Unable to find user: %s"
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
