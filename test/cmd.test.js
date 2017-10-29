@@ -2,7 +2,8 @@ var assert = require('assert')
   , sinon = require('sinon');
 
 var logger = require('../lib/logger')
-  , session = require('../lib/app');
+  , session = require('../lib/app')
+  , doc = require('../lib/doc.json');
 
 var ui = require('../lib/ui/ui');
 
@@ -153,6 +154,7 @@ describe('Commands', function() {
 
         afterEach(function() {
             session.connected = false;
+            session.users = {};
         });
 
         it('should work with steamID', function() {
@@ -188,7 +190,44 @@ describe('Commands', function() {
             session.connected = true;
             session.users = { [steamId1]: { player_name: "foo" } };
             ui.cmd(['pm', "bar"]);
-            assert(logger.log.calledWith('warn'));
+            assert(logger.log.calledWith('warn', doc.cmd.userNotFound));
+        });
+
+    });
+
+    describe('/remove', function() {
+
+        const steamId = "76561191234567890";
+
+        before(function() {
+            sinon.stub(ui.steam.friends, 'removeFriend');
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            ui.steam.friends.removeFriend.restore();
+            logger.log.restore();
+        });
+
+        afterEach(function() {
+            session.connected = false;
+            session.users = {};
+            session.friends = [];
+        });
+
+        it('should warn when user is not friend', function() {
+            session.connected = true;
+            session.users = { [steamId]: { player_name: "foo" } };
+            ui.cmd(['remove', "foo"]);
+            assert(logger.log.calledWith('warn', doc.cmd.userNotFriend));
+        });
+
+        it('should succeed when user is also friend', function() {
+            session.connected = true;
+            session.users = { [steamId]: { player_name: "foo" } };
+            session.friends = [ steamId ];
+            ui.cmd(['remove', "foo"]);
+            assert(ui.steam.friends.removeFriend.calledWith(steamId));
         });
 
     });
