@@ -9,7 +9,7 @@
     "autojoin run":"{cyan-fg}/autojoin run{/cyan-fg} - Join the group chats in the autojoin array. Useful if you have just added a chat ID and don't want to restart.",
     "block":"{cyan-fg}/block ID{/cyan-fg} - Add a user to your ignore list.",
     "connect":"{cyan-fg}/connect{/cyan-fg} - Connect to Steam servers. Will reconnect if already connected.",
-    "cmds":"{cyan-fg}/cmds{/cyan-fg} - List all available commands. Entries prefixed with 'info' are helpers. For more information use the {cyan-fg}/help{/cyan-fg} command.",
+    "cmds":"{cyan-fg}/cmds{/cyan-fg} - List all available commands.",
     "debug":"{cyan-fg}/debug LEVEL{/cyan-fg} - Set debug level. Debug levels: 0 = off, 1 = verbose, 2 = debug, 3 = silly.",
     "disconnect":"{cyan-fg}/disconnect{/cyan-fg} - Disconnect from Steam servers.",
     "dump":"{cyan-fg}/dump{/cyan-fg} - Take a dump of the Steam object for debugging purposes.",
@@ -38,7 +38,7 @@
   },
   "msg": {
     "notConnected":"You are currently not connected to the Steam servers.",
-    "help":"%s: Use {cyan-fg}/cmds{/cyan-fg} to list all available commands. For usage information, use the {cyan-fg}/help CMD{/cyan-fg} command. Entries prefixed with 'info' are not commands, but helpers. Use the {cyan-fg}/help HELPER{/cyan-fg} command for information on how to use a helper. If you wish to print the help page for all available commands, use the {cyan-fg}/help all{/cyan-fg} command.", 
+    "help":"%s: Use {cyan-fg}/cmds{/cyan-fg} to list all available commands. For usage information, use the {cyan-fg}/help CMD{/cyan-fg} command. If you wish to print the help page for all available commands, use the {cyan-fg}/help all{/cyan-fg} command.", 
     "helpNotExist":"%s: help entry does not exist for the following command: %s",
     "reconnectAttempt":"Attempting to reconnect...",
     "friendRequest":"You have received a friend request from {blue-fg}%s{/blue-fg}. Type {cyan-fg}/accept{/cyan-fg} to cycle through your friend requests and choose which to accept.",
@@ -70,7 +70,8 @@
     "addedFriend":"%s: Sent a friend request to %s.",
     "removedFriend":"%s: %s has been removed from your Steam friends list.",
     "userNotFound":"%s: Unable to find user: %s",
-    "userNotFriend":"%s: %s is not part of your Steam friends list."
+    "userNotFriend":"%s: %s is not part of your Steam friends list.",
+    "commands":"%s: List of commands: {cyan-fg}%s{/cyan-fg}"
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
