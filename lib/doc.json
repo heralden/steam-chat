@@ -48,12 +48,14 @@
     "bannedFromChat":"You have been banned from the chatroom.",
     "chatInvite":"You have received an invite to {blue-fg}%s{/blue-fg}, by {blue-fg}%s{/blue-fg}. Type {cyan-fg}/join{/cyan-fg} to accept the invite.",
     "reconnect":"Disconnected from Steam servers. Will attempt to reconnect after %d seconds.",
-    "reconnectLong":"Attempts to reconnect have failed. Will retry after %d minutes."
+    "reconnectLong":"Attempts to reconnect have failed. Will retry after %d minutes.",
+    "steamResponse":"%s: Steam responded with {green-fg}%s{/green-fg}."
   },
   "cmd": {
     "wrongArgumentLength":"%s: Incorrect amount of arguments. Should be %s.",
     "argumentsNotInRange":"%s: Incorrect amount of arguments. Should be between %s and %s.",
     "notNumber":"%s: Argument %s is not a number.",
+    "notSteamId":"%s: Argument %s is not a Steam ID.",
     "chatNotExist":"%s: Chat index %s does not exist.",
     "invalidDebugLevel":"%s: Please enter a debug level between 0 and 3.",
     "invalidLogFileLevel":"%s: %s: Please enter a logging level between 0 and 5.",
