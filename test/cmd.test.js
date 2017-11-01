@@ -38,13 +38,15 @@ describe('Commands', function() {
         it('should fail on invalid ID', function() {
             session.connected = true;
             ui.cmd(['add', invalidSteamId]);
-            assert(logger.log.calledWith('warn'));
+            assert(logger.log.calledWith('warn', 
+                doc.cmd.invalidSteamId, 'add', invalidSteamId));
         });
 
         it('should fail on invalid ID length', function() {
             session.connected = true;
             ui.cmd(['add', invalidSteamIdLength]);
-            assert(logger.log.calledWith('warn'));
+            assert(logger.log.calledWith('warn', 
+                doc.cmd.invalidSteamId, 'add', invalidSteamIdLength));
         });
 
     });

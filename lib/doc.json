@@ -55,7 +55,6 @@
     "wrongArgumentLength":"%s: Incorrect amount of arguments. Should be %s.",
     "argumentsNotInRange":"%s: Incorrect amount of arguments. Should be between %s and %s.",
     "notNumber":"%s: Argument %s is not a number.",
-    "notSteamId":"%s: Argument %s is not a Steam ID.",
     "chatNotExist":"%s: Chat index %s does not exist.",
     "invalidDebugLevel":"%s: Please enter a debug level between 0 and 3.",
     "invalidLogFileLevel":"%s: %s: Please enter a logging level between 0 and 5.",
