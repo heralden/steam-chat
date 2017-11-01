@@ -51,6 +51,34 @@ describe('Commands', function() {
 
     });
 
+    describe('/block', function() {
+
+        const steamId = "76561191234567890";
+
+        before(function() {
+            sinon.stub(ui.steam.friends, 'setIgnoreFriend')
+                .yields([1]);
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            ui.steam.friends.setIgnoreFriend.restore();
+            logger.log.restore();
+        });
+
+        afterEach(function() {
+            session.connected = false;
+        });
+
+        it('should interpret the callback EResult', function() {
+            session.connected = true;
+            ui.cmd(['block', steamId]);
+            assert(logger.log.calledWith('info',
+                doc.msg.steamResponse, 'block', 'OK'));
+        });
+
+    });
+
     describe('/join', function() {
 
         const validChatId = "123456789012345678";
