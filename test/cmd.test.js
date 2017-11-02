@@ -70,9 +70,11 @@ describe('Commands', function() {
             session.connected = false;
         });
 
-        it('should interpret the callback EResult', function() {
+        it('should call setIgnoreFriend and interpret callback EResult', function() {
             session.connected = true;
             ui.cmd(['block', steamId]);
+            assert(ui.steam.friends.setIgnoreFriend
+                .calledWith(steamId, true));
             assert(logger.log.calledWith('info',
                 doc.msg.steamResponse, 'block', 'OK'));
         });
@@ -258,6 +260,33 @@ describe('Commands', function() {
             session.friends = [ steamId ];
             ui.cmd(['remove', "foo"]);
             assert(ui.steam.friends.removeFriend.calledWith(steamId));
+        });
+
+    });
+
+    describe('/unblock', function() {
+
+        const steamId = "76561191234567890";
+
+        before(function() {
+            sinon.stub(ui.steam.friends, 'setIgnoreFriend');
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            ui.steam.friends.setIgnoreFriend.restore();
+            logger.log.restore();
+        });
+
+        afterEach(function() {
+            session.connected = false;
+        });
+
+        it('should call setIgnoreFriend', function() {
+            session.connected = true;
+            ui.cmd(['unblock', steamId]);
+            assert(ui.steam.friends.setIgnoreFriend
+                .calledWith(steamId, false));
         });
 
     });
