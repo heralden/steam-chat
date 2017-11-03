@@ -72,7 +72,8 @@
     "removedFriend":"%s: %s has been removed from your Steam friends list.",
     "userNotFound":"%s: Unable to find user: %s",
     "userNotFriend":"%s: %s is not part of your Steam friends list.",
-    "commands":"%s: List of commands: {cyan-fg}%s{/cyan-fg}"
+    "commands":"%s: List of commands: {cyan-fg}%s{/cyan-fg}",
+    "invalidKey":"%s: Attempted to set invalid key: %s"
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",

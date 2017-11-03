@@ -264,6 +264,25 @@ describe('Commands', function() {
 
     });
 
+    describe('/set', function() {
+
+        before(function() {
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            logger.log.restore();
+        });
+
+        it('should warn on invalid key', function() {
+            ui.cmd(['set', "foo", "bar"]);
+            assert(logger.log
+                .calledWith('warn', doc.cmd.invalidKey));
+        });
+
+    });
+
+
     describe('/unblock', function() {
 
         const steamId = "76561191234567890";
