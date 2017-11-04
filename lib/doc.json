@@ -14,6 +14,7 @@
     "disconnect":"{cyan-fg}/disconnect{/cyan-fg} - Disconnect from Steam servers.",
     "dump":"{cyan-fg}/dump{/cyan-fg} - Take a dump of the Steam object for debugging purposes.",
     "games":"{cyan-fg}/games{/cyan-fg} - Switch userlist window to display what games the users are playing.",
+    "get":"{cyan-fg}/get [OPTION]{/cyan-fg} - Arg: Print value of specified config option. No arg: Print all config options.",
     "help":"{cyan-fg}/help [CMD]{/cyan-fg} - Arg: Print the help entry for the specified command. You may also use 'all' if you wish to display all help entries. No arg: Print introductory help message.",
     "list":"{yellow-fg}[list]{/yellow-fg} - A list of entries is spawned in the userlist window. Use 'j' and 'k' or the arrow keys to scroll through the items and press 'Enter' to make a selection. Press 'q' if you wish to cancel the selection.",
     "join":"{cyan-fg}/join [chatID]{/cyan-fg} - Arg: Join specified chat room. No arg: Join the chat room you were last invited to.",
@@ -26,13 +27,7 @@
     "saveconfig":"{cyan-fg}/saveconfig{/cyan-fg} - Save your login credentials to 'config.json'. Warning: Stored in plain-text.",
     "scrollf":"{cyan-fg}/scrollf{/cyan-fg} - Scroll chat window forward a screen.",
     "scrollb":"{cyan-fg}/scrollb{/cyan-fg} - Scroll chat window back a screen.",
-    "set":"{cyan-fg}/set OPTION VALUE{/cyan-fg} - Change the value of one of the following options.",
-    "set username":"{cyan-fg}/set username VALUE{/cyan-fg} - Required for login.",
-    "set password":"{cyan-fg}/set password VALUE{/cyan-fg} - Required for login.",
-    "set guardcode":"{cyan-fg}/set guardcode VALUE{/cyan-fg} - If you have Steam Guard enabled, please specify a Steam Guard Code with this command. If you haven't received a Guard Code yet, you may login without a Guard Code to have it sent.",
-    "set twofactor":"{cyan-fg}/set twofactor VALUE{/cyan-fg} - If you use Steam Mobile Authentication, you'll need to enter your two-factor code with this command.",
-    "set userlistwidth":"{cyan-fg}/set userlistwidth NUM{/cyan-fg} - Specify width of userlist window in characters.",
-    "set scrollback":"{cyan-fg}/set scrollback NUM{/cyan-fg} - Specify how many lines to keep as a scrollback buffer in chat windows.",
+    "set":"{cyan-fg}/set OPTION VALUE{/cyan-fg} - Change the value of any config option.",
     "unblock":"{cyan-fg}/unblock ID{/cyan-fg} - Remove a user from your ignore list.",
     "w":"{cyan-fg}/w NUM{/cyan-fg} - Change to window specified with number."
   },
@@ -73,7 +68,7 @@
     "userNotFound":"%s: Unable to find user: %s",
     "userNotFriend":"%s: %s is not part of your Steam friends list.",
     "commands":"%s: List of commands: {cyan-fg}%s{/cyan-fg}",
-    "invalidKey":"%s: Attempted to set invalid key: %s"
+    "invalidKey":"%s: Specified key is invalid: %s"
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",

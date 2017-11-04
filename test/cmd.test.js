@@ -82,6 +82,39 @@ describe('Commands', function() {
 
     });
 
+    describe('/get', function() {
+
+        before(function() {
+            sinon.stub(logger, 'log');
+            sinon.stub(config, 'get');
+        });
+
+        after(function() {
+            logger.log.restore();
+            config.get.restore();
+        });
+
+        it('should get on valid key', function() {
+            ui.cmd(['get', "username"]);
+            assert(config.get
+                .calledWith("username"));
+        });
+
+        it('should get on undefined key', function() {
+            ui.cmd(['get']);
+            assert(config.get
+                .calledWith(undefined));
+        });
+
+        it('should warn on invalid key', function() {
+            ui.cmd(['get', "foo"]);
+            assert(logger.log
+                .calledWith('warn', doc.cmd.invalidKey));
+        });
+
+    });
+
+
     describe('/join', function() {
 
         const validChatId = "123456789012345678";
