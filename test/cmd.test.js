@@ -2,6 +2,7 @@ var assert = require('assert')
   , sinon = require('sinon');
 
 var logger = require('../lib/logger')
+  , config = require('../lib/config')
   , session = require('../lib/app')
   , doc = require('../lib/doc.json');
 
@@ -268,10 +269,18 @@ describe('Commands', function() {
 
         before(function() {
             sinon.stub(logger, 'log');
+            sinon.stub(config, 'set');
         });
 
         after(function() {
             logger.log.restore();
+            config.set.restore();
+        });
+
+        it('should set on valid key', function() {
+            ui.cmd(['set', "username", "bar"]);
+            assert(config.set
+                .calledWith("username", "bar"));
         });
 
         it('should warn on invalid key', function() {
