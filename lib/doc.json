@@ -68,7 +68,8 @@
     "userNotFound":"%s: Unable to find user: %s",
     "userNotFriend":"%s: %s is not part of your Steam friends list.",
     "commands":"%s: List of commands: {cyan-fg}%s{/cyan-fg}",
-    "invalidKey":"%s: Specified key is invalid: %s"
+    "invalidKey":"%s: Specified key is invalid: %s",
+    "cannotSetObject":"%s: Cannot use {cyan-fg}set{/cyan-fg} command on object: %s"
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",

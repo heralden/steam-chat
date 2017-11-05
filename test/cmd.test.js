@@ -322,6 +322,29 @@ describe('Commands', function() {
                 .calledWith('warn', doc.cmd.invalidKey));
         });
 
+        it('should cast value to correct type', function() {
+            // Casting to string
+            ui.cmd(['set', "username", "foobar"]);
+            assert(config.set
+                .calledWith("username", "foobar"));
+
+            // Casting to number
+            ui.cmd(['set', "scrollback", "1500"]);
+            assert(config.set
+                .calledWith("scrollback", 1500));
+
+            // Casting to boolean
+            ui.cmd(['set', "24hour", "true"]);
+            assert(config.set
+                .calledWith("24hour", true));
+        });
+
+        it ('should neglect to set array (object)', function() {
+            ui.cmd(['set', "autojoin", "foobar"]);
+            assert(logger.log
+                .calledWith('warn', doc.cmd.cannotSetObject));
+        });
+
     });
 
 
