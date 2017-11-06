@@ -261,6 +261,28 @@ describe('Commands', function() {
 
     });
 
+    describe('/quit', function() {
+
+        before(function() {
+            sinon.stub(config, 'save')
+                .yields({ error: "test" });
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            config.save.restore();
+            logger.log.restore();
+        });
+
+        it('should error when config fails to save', function() {
+            ui.cmd(['quit']);
+            assert(logger.log
+                .calledWith('error', doc.err.quitSaveError));
+        });
+
+    });
+
+
     describe('/remove', function() {
 
         const steamId = "76561191234567890";

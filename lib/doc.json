@@ -22,7 +22,8 @@
     "part":"{cyan-fg}/part{/cyan-fg} - Leave the chat or PM and close the window.",
     "persona":"{cyan-fg}/persona NAME{/cyan-fg} - Change your username.",
     "pm":"{cyan-fg}/pm [username|ID]{/cyan-fg} - Arg: Start a conversation with the user with the following username (case insensitive and partial match) or Steam ID. No arg: Select a user in your friends list to message. {yellow-fg}[list]{/yellow-fg}",
-    "quit":"{cyan-fg}/quit{/cyan-fg} - Close this program.",
+    "quit":"{cyan-fg}/quit{/cyan-fg} - Saves the config and closes the program. Will print an error if it fails to save the config file.",
+    "quit!":"{cyan-fg}/quit!{/cyan-fg} - Closes the program without attempting to save the config file.",
     "remove":"{cyan-fg}/remove [username | ID]{/cyan-fg} - Remove a friend from your Steam friends list. {yellow-fg}[list]{/yellow-fg}",
     "saveconfig":"{cyan-fg}/saveconfig{/cyan-fg} - Save your login credentials to 'config.json'. Warning: Stored in plain-text.",
     "scrollf":"{cyan-fg}/scrollf{/cyan-fg} - Scroll chat window forward a screen.",
@@ -78,6 +79,7 @@
     "loginInfo":"Invalid username or password. Please set your login information correctly and run {cyan-fg}/connect{/cyan-fg}.",
     "invalidCode":"Specified Steam Guard code is invalid. Clearing guard code. Please reattempt connection with {cyan-fg}/connect{/cyan-fg}.",
     "loginTimeout":"There have been too many login failures from your network in a short time period. Please wait and try again later.",
-    "needTwoFactor":"Your Steam account has Two-Factor Authentication enabled. Please set your Two-Factor code with the {cyan-fg}/set twofactor VALUE{/cyan-fg} command and reconnect."
+    "needTwoFactor":"Your Steam account has Two-Factor Authentication enabled. Please set your Two-Factor code with the {cyan-fg}/set twofactor VALUE{/cyan-fg} command and reconnect.",
+    "quitSaveError":"%s: Error when saving config file. Use {cyan-fg}/quit!{/cyan-fg} command if you wish to quit without saving."
   }
 }
