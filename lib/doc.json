@@ -25,7 +25,7 @@
     "quit":"{cyan-fg}/quit{/cyan-fg} - Saves the config and closes the program. Will print an error if it fails to save the config file.",
     "quit!":"{cyan-fg}/quit!{/cyan-fg} - Closes the program without attempting to save the config file.",
     "remove":"{cyan-fg}/remove [username | ID]{/cyan-fg} - Remove a friend from your Steam friends list. {yellow-fg}[list]{/yellow-fg}",
-    "saveconfig":"{cyan-fg}/saveconfig{/cyan-fg} - Save your login credentials to 'config.json'. Warning: Stored in plain-text.",
+    "save":"{cyan-fg}/save{/cyan-fg} - Save login credentials and config options to 'config.json'.",
     "scrollf":"{cyan-fg}/scrollf{/cyan-fg} - Scroll chat window forward a screen.",
     "scrollb":"{cyan-fg}/scrollb{/cyan-fg} - Scroll chat window back a screen.",
     "set":"{cyan-fg}/set OPTION VALUE{/cyan-fg} - Change the value of any config option.",
@@ -70,7 +70,8 @@
     "userNotFriend":"%s: %s is not part of your Steam friends list.",
     "commands":"%s: List of commands: {cyan-fg}%s{/cyan-fg}",
     "invalidKey":"%s: Specified key is invalid: %s",
-    "cannotSetObject":"%s: Cannot use {cyan-fg}set{/cyan-fg} command on object: %s"
+    "cannotSetObject":"%s: Cannot use {cyan-fg}set{/cyan-fg} command on object: %s",
+    "saveSuccess":"%s: Config file has been saved successfully."
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
@@ -80,6 +81,7 @@
     "invalidCode":"Specified Steam Guard code is invalid. Clearing guard code. Please reattempt connection with {cyan-fg}/connect{/cyan-fg}.",
     "loginTimeout":"There have been too many login failures from your network in a short time period. Please wait and try again later.",
     "needTwoFactor":"Your Steam account has Two-Factor Authentication enabled. Please set your Two-Factor code with the {cyan-fg}/set twofactor VALUE{/cyan-fg} command and reconnect.",
-    "quitSaveError":"%s: Error when saving config file. Use {cyan-fg}/quit!{/cyan-fg} command if you wish to quit without saving."
+    "quitSaveError":"%s: Error when saving config file. Use {cyan-fg}/quit!{/cyan-fg} command if you wish to quit without saving.",
+    "saveError":"%s: Error when saving config file."
   }
 }
