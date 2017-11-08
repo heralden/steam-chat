@@ -2,10 +2,10 @@
   "help": {
     "accept":"{cyan-fg}/accept{/cyan-fg} - Accept your pending friend requests. {yellow-fg}[list]{/yellow-fg}",
     "add":"{cyan-fg}/add ID{/cyan-fg} - Send a friend request to the specified steam ID.",
-    "autojoin":"{cyan-fg}/autojoin CMD [arg]{/cyan-fg} - Interact with the autojoin array, allowing you to select which group chats to automatically join when you login.",
+    "autojoin":"{cyan-fg}/autojoin ACTION [arg]{/cyan-fg} - Interact with the autojoin array, allowing you to select which group chats to automatically join when you login.",
     "autojoin add":"{cyan-fg}/autojoin add [ID]{/cyan-fg} - Arg: Add specified chat ID to autojoin array. No arg: Add current group chat to autojoin array.",
-    "autojoin del":"{cyan-fg}/autojoin del [ID | index]{/cyan-fg} - Arg: Remove specified chat ID or index number (counting from zero) from autojoin array. No arg: Remove current group chat from autojoin array.",
-    "autojoin list":"{cyan-fg}/autojoin list{/cyan-fg} - List the autojoin array.",
+    "autojoin remove":"{cyan-fg}/autojoin rm [ID | index]{/cyan-fg} - Arg: Remove specified chat ID or index number (counting from zero) from autojoin array. No arg: Remove current group chat from autojoin array.",
+    "autojoin list":"{cyan-fg}/autojoin ls{/cyan-fg} - List the autojoin array.",
     "autojoin run":"{cyan-fg}/autojoin run{/cyan-fg} - Join the group chats in the autojoin array. Useful if you have just added a chat ID and don't want to restart.",
     "block":"{cyan-fg}/block ID{/cyan-fg} - Add a user to your ignore list.",
     "connect":"{cyan-fg}/connect{/cyan-fg} - Connect to Steam servers. Will reconnect if already connected.",
@@ -71,9 +71,10 @@
     "userNotFriend":"%s: %s is not part of your Steam friends list.",
     "commands":"%s: List of commands: {cyan-fg}%s{/cyan-fg}",
     "invalidKey":"%s: Specified key is invalid: %s",
-    "cannotSetObject":"%s: Cannot use {cyan-fg}set{/cyan-fg} command on object: %s",
+    "cannotSetObject":"%s: Cannot use {cyan-fg}/set{/cyan-fg} command on object: %s",
     "saveSuccess":"%s: Config file has been saved successfully.",
-    "reloadSuccess":"%s: Config file has been reloaded successfully."
+    "reloadSuccess":"%s: Config file has been reloaded successfully.",
+    "autojoinNoAction":"%s: Please specify one of the following actions as an argument to {cyan-fg}/autojoin{/cyan-fg}: add, remove, list, run"
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
