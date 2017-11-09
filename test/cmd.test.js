@@ -28,6 +28,8 @@ describe('Commands', function() {
 
         afterEach(function() {
             session.connected = false;
+            ui.steam.friends.addFriend.reset();
+            logger.log.reset();
         });
 
         it('should send a friend request on valid ID', function() {
@@ -52,6 +54,137 @@ describe('Commands', function() {
 
     });
 
+    describe('/autojoin', function() {
+
+        const chatIdA = "123456789012345678";
+        const chatIdB = "234567890123456789";
+        const chatIdC = "345678901234567890";
+        const invalidChatId = "12345678901234567";
+        const autojoinArr = [ chatIdA, chatIdB ];
+
+        before(function() {
+            config.set('autojoin', autojoinArr);
+            sinon.stub(logger, 'log');
+            sinon.stub(config, 'set');
+        });
+
+        after(function() {
+            logger.log.restore();
+            config.set.restore();
+            config.set('autojoin', []);
+        });
+
+        afterEach(function() {
+            session.connected = false;
+            session.currentChat = "log";
+            config.set.reset();
+            logger.log.reset();
+        });
+
+        it('should print usage information on missing action', function() {
+            ui.cmd(['autojoin']);
+            assert(logger.log.calledWith('info', doc.autojoin.noAction));
+        });
+
+        describe('add', function() {
+
+            it('should add Chat ID if new', function() {
+                ui.cmd(['autojoin', 'add', chatIdC]);
+                assert(config.set.calledWith('autojoin',
+                    autojoinArr.concat(chatIdC)));
+            });
+
+            it('should warn on adding already present Chat ID', function() {
+                ui.cmd(['autojoin', 'add', chatIdA]);
+                assert(logger.log.calledWith('warn',
+                    doc.autojoin.alreadyAdded));
+            });
+
+            it('should warn on invalid Chat ID', function() {
+                ui.cmd(['autojoin', 'add', invalidChatId]);
+                assert(logger.log.calledWith('warn',
+                    doc.autojoin.invalidChatId));
+            });
+
+            it('should add currentChat if valid Chat ID', function() {
+                session.currentChat = chatIdC;
+                ui.cmd(['autojoin', 'add']);
+                assert(config.set.calledWith('autojoin',
+                    autojoinArr.concat(chatIdC)));
+            });
+
+            it('should warn when no currentChat and argument', function() {
+                ui.cmd(['autojoin', 'add']);
+                assert(logger.log.calledWith('warn',
+                    doc.autojoin.addError));
+            });
+
+        });
+
+        describe('remove', function() {
+
+            it('should remove Chat ID if exists', function() {
+                ui.cmd(['autojoin', 'remove', chatIdB]);
+                assert(config.set.calledWith('autojoin',
+                    autojoinArr.filter(e => e != chatIdB)));
+            });
+
+            it('should warn on removing nonexistent Chat ID', function() {
+                ui.cmd(['autojoin', 'remove', chatIdC]);
+                assert(logger.log.calledWith('warn',
+                    doc.autojoin.notInArray));
+            });
+
+            it('should remove Chat ID by valid index', function() {
+                ui.cmd(['autojoin', 'remove', 1]);
+                assert(config.set.calledWith('autojoin',
+                    autojoinArr.filter(e => e != chatIdB)));
+            });
+
+            it('should warn on invalid index', function() {
+                ui.cmd(['autojoin', 'remove', 2]);
+                assert(logger.log.calledWith('warn',
+                    doc.autojoin.removeError));
+            });
+
+            it('should remove currentChat if valid Chat ID', function() {
+                session.currentChat = chatIdB;
+                ui.cmd(['autojoin', 'remove']);
+                assert(config.set.calledWith('autojoin',
+                    autojoinArr.filter(e => e != chatIdB)));
+            });
+
+            it('should warn when invalid currentChat and argument', function() {
+                ui.cmd(['autojoin', 'remove']);
+                assert(logger.log.calledWith('warn',
+                    doc.autojoin.removeError));
+            });
+
+        });
+
+        describe('run', function() {
+
+            before(function() {
+                sinon.stub(ui.steam.friends, 'joinChat');
+            });
+
+            after(function() {
+                ui.steam.friends.joinChat.restore();
+            });
+
+            it('should join chats in autojoin array', function() {
+                session.connected = true;
+                ui.cmd(['autojoin', 'run']);
+                assert(ui.steam.friends.joinChat
+                    .calledWith(chatIdA));
+                assert(ui.steam.friends.joinChat
+                    .calledWith(chatIdB));
+            });
+
+        });
+
+    });
+
     describe('/block', function() {
 
         const steamId = "76561191234567890";
@@ -69,6 +202,8 @@ describe('Commands', function() {
 
         afterEach(function() {
             session.connected = false;
+            ui.steam.friends.setIgnoreFriend.reset();
+            logger.log.reset();
         });
 
         it('should call setIgnoreFriend and interpret callback EResult', function() {
@@ -92,6 +227,11 @@ describe('Commands', function() {
         after(function() {
             logger.log.restore();
             config.get.restore();
+        });
+
+        afterEach(function() {
+            logger.log.reset();
+            config.get.reset();
         });
 
         it('should get on valid key', function() {
@@ -133,6 +273,8 @@ describe('Commands', function() {
         afterEach(function() {
             session.connected = false;
             session.lastInvite = "";
+            ui.steam.friends.joinChat.reset();
+            logger.log.reset();
         });
 
         it('should join with argument if valid', function() {
@@ -185,6 +327,8 @@ describe('Commands', function() {
 
         afterEach(function() {
             session.connected = false;
+            ui.steam.friends.setPersonaName.reset();
+            logger.log.reset();
         });
 
         it('should set persona name if valid', function() {
@@ -221,6 +365,9 @@ describe('Commands', function() {
         afterEach(function() {
             session.connected = false;
             session.users = {};
+            ui.chatwin.newChat.reset();
+            ui.chatwin.switchChat.reset();
+            logger.log.reset();
         });
 
         it('should work with steamID', function() {
@@ -274,6 +421,11 @@ describe('Commands', function() {
             logger.log.restore();
         });
 
+        afterEach(function() {
+            config.save.reset();
+            logger.log.reset();
+        });
+
         it('should error when config fails to save', function() {
             ui.cmd(['quit']);
             assert(logger.log
@@ -301,6 +453,8 @@ describe('Commands', function() {
             session.connected = false;
             session.users = {};
             session.friends = [];
+            ui.steam.friends.removeFriend.reset();
+            logger.log.reset();
         });
 
         it('should warn when user is not friend', function() {
@@ -330,6 +484,11 @@ describe('Commands', function() {
         after(function() {
             logger.log.restore();
             config.set.restore();
+        });
+
+        afterEach(function() {
+            logger.log.reset();
+            config.set.reset();
         });
 
         it('should set on valid key', function() {
@@ -386,6 +545,8 @@ describe('Commands', function() {
 
         afterEach(function() {
             session.connected = false;
+            ui.steam.friends.setIgnoreFriend.reset();
+            logger.log.reset();
         });
 
         it('should call setIgnoreFriend', function() {

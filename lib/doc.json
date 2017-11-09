@@ -4,7 +4,7 @@
     "add":"{cyan-fg}/add ID{/cyan-fg} - Send a friend request to the specified steam ID.",
     "autojoin":"{cyan-fg}/autojoin ACTION [arg]{/cyan-fg} - Interact with the autojoin array, allowing you to select which group chats to automatically join when you login.",
     "autojoin add":"{cyan-fg}/autojoin add [ID]{/cyan-fg} - Arg: Add specified chat ID to autojoin array. No arg: Add current group chat to autojoin array.",
-    "autojoin remove":"{cyan-fg}/autojoin rm [ID | index]{/cyan-fg} - Arg: Remove specified chat ID or index number (counting from zero) from autojoin array. No arg: Remove current group chat from autojoin array.",
+    "autojoin remove":"{cyan-fg}/autojoin remove [ID | index]{/cyan-fg} - Arg: Remove specified chat ID or index number (counting from zero) from autojoin array. No arg: Remove current group chat from autojoin array.",
     "autojoin run":"{cyan-fg}/autojoin run{/cyan-fg} - Join the group chats in the autojoin array. Useful if you have just added a chat ID and don't want to restart.",
     "block":"{cyan-fg}/block ID{/cyan-fg} - Add a user to your ignore list.",
     "connect":"{cyan-fg}/connect{/cyan-fg} - Connect to Steam servers. Will reconnect if already connected.",
