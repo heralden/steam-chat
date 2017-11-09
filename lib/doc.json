@@ -5,7 +5,6 @@
     "autojoin":"{cyan-fg}/autojoin ACTION [arg]{/cyan-fg} - Interact with the autojoin array, allowing you to select which group chats to automatically join when you login.",
     "autojoin add":"{cyan-fg}/autojoin add [ID]{/cyan-fg} - Arg: Add specified chat ID to autojoin array. No arg: Add current group chat to autojoin array.",
     "autojoin remove":"{cyan-fg}/autojoin rm [ID | index]{/cyan-fg} - Arg: Remove specified chat ID or index number (counting from zero) from autojoin array. No arg: Remove current group chat from autojoin array.",
-    "autojoin list":"{cyan-fg}/autojoin ls{/cyan-fg} - List the autojoin array.",
     "autojoin run":"{cyan-fg}/autojoin run{/cyan-fg} - Join the group chats in the autojoin array. Useful if you have just added a chat ID and don't want to restart.",
     "block":"{cyan-fg}/block ID{/cyan-fg} - Add a user to your ignore list.",
     "connect":"{cyan-fg}/connect{/cyan-fg} - Connect to Steam servers. Will reconnect if already connected.",
@@ -48,6 +47,10 @@
     "reconnectLong":"Attempts to reconnect have failed. Will retry after %d minutes.",
     "steamResponse":"%s: Steam responded with {green-fg}%s{/green-fg}."
   },
+  "debug": {
+    "joinChat":"%s: Attempting to join Chat ID %s.",
+    "switchChat":"%s: Chat window has been switched to %s."
+  },
   "cmd": {
     "wrongArgumentLength":"%s: Incorrect amount of arguments. Should be %s.",
     "argumentsNotInRange":"%s: Incorrect amount of arguments. Should be between %s and %s.",
@@ -57,12 +60,10 @@
     "invalidLogFileLevel":"%s: %s: Please enter a logging level between 0 and 5.",
     "invalidBoolean":"%s: %s: Please specify either true or false.",
     "setLoggingLevel":"%s: Debug level successfully set to %s.",
-    "switchChat":"%s: Chat window has been switched to %s.",
     "logFileEnable":"Logging to file has been enabled at level %s.",
     "logFileDisable":"Logging to file has been disabled.",
     "unableToLeaveChat":"%s: Unable to leave chat as you are currently not connected to Steam.",
     "notChatOrInvite":"%s: You haven't been invited to any chatrooms or specified an invalid Chat ID.",
-    "joinChat":"%s: Attempting to join Chat ID %s.",
     "changedPersona":"%s: Persona has been changed to %s.",
     "invalidSteamId":"%s: Invalid Steam ID specified: %s",
     "addedFriend":"%s: Sent a friend request to %s.",
@@ -73,8 +74,15 @@
     "invalidKey":"%s: Specified key is invalid: %s",
     "cannotSetObject":"%s: Cannot use {cyan-fg}/set{/cyan-fg} command on object: %s",
     "saveSuccess":"%s: Config file has been saved successfully.",
-    "reloadSuccess":"%s: Config file has been reloaded successfully.",
-    "autojoinNoAction":"%s: Please specify one of the following actions as an argument to {cyan-fg}/autojoin{/cyan-fg}: add, remove, list, run"
+    "reloadSuccess":"%s: Config file has been reloaded successfully."
+  },
+  "autojoin": {
+    "noAction":"%s: Please specify one of the following actions as an argument to {cyan-fg}/autojoin{/cyan-fg}: add, remove, run",
+    "alreadyAdded":"%s: Chat ID has already been added to autojoin: %s",
+    "invalidChatId":"%s: Invalid Chat ID specified: %s",
+    "addError":"%s: Please switch to a group chat window or specify a Chat ID.",
+    "notInArray":"%s: Chat ID does not exist in autojoin: %s",
+    "removeError":"%s: Please switch to a group chat window or specify a valid index or Chat ID to remove from autojoin."
   },
   "err": {
     "findFriend":"Invalid argument: Argument is not a friends or chat members steam ID or username.",
