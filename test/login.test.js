@@ -37,6 +37,8 @@ describe('Login', function() {
             config.set(val, "");
         });
         config.set('sentryauth', false);
+        this.steamUser.logOn.reset();
+        logger.log.reset();
     });
 
     it('should do a regular login', function(done) {
