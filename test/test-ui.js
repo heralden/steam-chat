@@ -1,5 +1,4 @@
-var logger = require('../lib/logger')
-  , session = require('../lib/app');
+var session = require('../lib/app');
 
 var ui = require('../lib/ui/ui');
 
@@ -7,6 +6,7 @@ ui.init();
 
 ui.cmd(["debug", 2]);
 
+/*
 session.users = {
     '92837105728491852': { 
         persona_state: "offline", 
@@ -72,3 +72,5 @@ setTimeout(() => {
 setTimeout(() => {
     ui.userwin.updateGroup('8294721957374875');
 }, 2000);
+
+*/

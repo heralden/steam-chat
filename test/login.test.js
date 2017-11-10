@@ -45,7 +45,7 @@ describe('Login', function() {
         config.set('username', testUser);
         config.set('password', testPass);
 
-        steamLogin(this.steamUser, () => {
+        steamLogin.call({ user: this.steamUser }, () => {
             assert(this.steamUser.logOn.calledWithExactly(
                 sinon.match({
                     account_name: testUser,
@@ -61,7 +61,7 @@ describe('Login', function() {
         config.set('password', testPass);
         config.set('twofactor', testTwoFactor);
 
-        steamLogin(this.steamUser, () => {
+        steamLogin.call({ user: this.steamUser }, () => {
             assert(this.steamUser.logOn.calledWithExactly(
                 sinon.match({
                     account_name: testUser,
@@ -78,7 +78,7 @@ describe('Login', function() {
         config.set('password', testPass);
         config.set('guardcode', testGuardCode);
 
-        steamLogin(this.steamUser, () => {
+        steamLogin.call({ user: this.steamUser }, () => {
             assert(this.steamUser.logOn.calledWithExactly(
                 sinon.match({
                     account_name: testUser,
@@ -101,7 +101,7 @@ describe('Login', function() {
         const sentryhash = crypto
             .createHash('sha1').update(testSentryBytes).digest();
 
-        steamLogin(this.steamUser, () => {
+        steamLogin.call({ user: this.steamUser }, () => {
             assert(this.steamUser.logOn.calledWithExactly(
                 sinon.match({
                     account_name: testUser,
