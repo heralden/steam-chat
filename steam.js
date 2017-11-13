@@ -224,7 +224,7 @@ steamChatClient.prototype.listen = function() {
     if (this.interface.session.chat.indexOf(steamID) < 0) {
       this.interface.buildChat(steamID);
     }
-    if (msg.length > 0) { //prevents blank messages since friendMsg emits when user is typing
+    if (msg.trim().length > 0) { //prevents blank messages since friendMsg emits when user is typing
       if (this.steamFriends.personaStates[steamID].game_name.length > 0) {
         this.interface.chatPrint('{green-fg}' + user + '{/green-fg}: ' + msg, steamID);
       } else {
