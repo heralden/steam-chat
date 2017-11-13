@@ -254,6 +254,38 @@ describe('Commands', function() {
 
     });
 
+    describe('/help', function() {
+
+        before(function() {
+            sinon.stub(logger, 'log');
+        });
+
+        after(function() {
+            logger.log.restore();
+        });
+
+        afterEach(function() {
+            logger.log.reset();
+        });
+
+        it('should print help message when no arguments', function() {
+            ui.cmd(['help']);
+            assert(logger.log.calledWith('info', doc.msg.help));
+        });
+
+        it('should print help page for argument', function() {
+            ui.cmd(['help', 'autojoin']);
+            assert(logger.log.calledWith('info',
+                "help: ".concat(doc.help.autojoin)));
+        });
+
+        it('should handle arguments with spaces', function() {
+            ui.cmd(['help', 'autojoin', 'add']);
+            assert(logger.log.calledWith('info', 
+                "help: ".concat(doc.help['autojoin add'])));
+        });
+
+    });
 
     describe('/join', function() {
 
