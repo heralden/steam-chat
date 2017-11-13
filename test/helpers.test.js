@@ -31,6 +31,11 @@ describe('Helper', function() {
             assert.strictEqual(res, undefined);
         });
 
+        it('should return undefined when object is undefined', function() {
+            const res = helpers.safeGet(undefined, 'name_info', 'clan_name');
+            assert.strictEqual(res, undefined);
+        });
+
     });
 
 });
