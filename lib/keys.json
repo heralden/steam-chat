@@ -1,7 +1,16 @@
 {
     "pageup": "scrollb",
-    "M-v": "scrollb",
     "pagedown": "scrollf",
+    "M-v": "scrollb",
     "C-v": "scrollf",
-    "C-c": "quit"
+    "C-c": "quit",
+    "M-1": "w 1",
+    "M-2": "w 2",
+    "M-3": "w 3",
+    "M-4": "w 4",
+    "M-5": "w 5",
+    "M-6": "w 6",
+    "M-7": "w 7",
+    "M-8": "w 8",
+    "M-9": "w 9"
 }
