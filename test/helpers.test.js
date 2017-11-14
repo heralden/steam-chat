@@ -9,7 +9,15 @@ describe('Helper', function() {
 
         const clanState = { 
             name_info: { 
-                clan_name: "foo" 
+                clan_name: "foo",
+                other: { 
+                    secret: "value"
+                },
+                members: [ "bar" ],
+                nothing: [],
+                deep: {
+                    sea: "foobar"
+                }
             },
             user_counts: {
                 chatting: 5
@@ -25,6 +33,26 @@ describe('Helper', function() {
         it('should return value on valid keys', function() {
             const res = helpers.safeGet(clanState, 'name_info', 'clan_name');
             assert.strictEqual(res, "foo");
+        });
+
+        it('should return nested objects', function() {
+            const res = helpers.safeGet(clanState, 'name_info', 'other');
+            assert.deepStrictEqual(res, { secret: "value" });
+        });
+
+        it('should return arrays', function() {
+            const res = helpers.safeGet(clanState, 'name_info', 'members');
+            assert.deepStrictEqual(res, [ "bar" ]);
+        });
+
+        it('should return empty arrays', function() {
+            const res = helpers.safeGet(clanState, 'name_info', 'nothing');
+            assert.deepStrictEqual(res, []);
+        });
+
+        it('should return deeply nested values', function() {
+            const res = helpers.safeGet(clanState, 'name_info', 'deep', 'sea');
+            assert.strictEqual(res, "foobar");
         });
 
         it('should return undefined on invalid key', function() {
