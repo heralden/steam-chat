@@ -1,6 +1,7 @@
 var assert = require('assert');
 
-var helpers = require('../lib/helpers');
+var helpers = require('../lib/helpers')
+  , doc = require('../lib/doc.json');
 
 describe('Helper', function() {
 
@@ -34,6 +35,21 @@ describe('Helper', function() {
         it('should return undefined when object is undefined', function() {
             const res = helpers.safeGet(undefined, 'name_info', 'clan_name');
             assert.strictEqual(res, undefined);
+        });
+
+    });
+
+    describe('replaceString()', function() {
+
+        it('should replace string with one argument', function() {
+            const res = helpers.replaceString(doc.act.youKicked, "foo");
+            assert.strictEqual(res, doc.act.youKicked.replace("%s", "foo"));
+        });
+
+        it('should replace string with two arguments', function() {
+            const res = helpers.replaceString(doc.act.userBanned, "foo", "bar");
+            assert.strictEqual(res, doc.act.userBanned
+                .replace("%s", "foo").replace("%s", "bar"));
         });
 
     });
