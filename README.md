@@ -6,7 +6,7 @@ Uses [node-steam](https://github.com/seishun/node-steam) and [blessed](https://g
 
 ## Version 0.1.0
 
-steam-chat has been completely rewritten from scratch. If you're using a prior version, do not update with `git pull`, instead delete the directory and run a new `git clone` followed by `npm install`.
+steam-chat has been completely rewritten from scratch. The old version is available as a [release](https://github.com/rubyconn/steam-chat/releases/tag/v0.0.4-alpha) if you're missing any functionality or experiencing issues.
 
 # Usage
 
@@ -52,3 +52,15 @@ You can set your two-factor code immediately together with your username and pas
 /set twofactor yourcode
 /connect
 ```
+
+## Keybindings
+
+Edit the `lib/keys.json` file if you wish to customize the keybindings. By default, the following keybindings are assigned:
+
+- `pageup, M-v: scrollb`
+- `pagedown, C-v: scrollf`
+- `C-c: quit`
+- `M-1: w 1`
+- `M-2: w 2`
+- ...
+- `M-9: w 9`
