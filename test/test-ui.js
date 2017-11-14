@@ -6,7 +6,6 @@ ui.init();
 
 ui.cmd(["debug", 2]);
 
-/*
 session.users = {
     '92837105728491852': { 
         persona_state: "offline", 
@@ -72,5 +71,3 @@ setTimeout(() => {
 setTimeout(() => {
     ui.userwin.updateGroup('8294721957374875');
 }, 2000);
-
-*/

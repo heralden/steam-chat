@@ -17,9 +17,10 @@
     "winston": "^2.3.0"
   },
   "engines": {
-    "node": ">=4.1.1"
+    "node": ">=6.0.0"
   },
   "scripts": {
+    "start": "node lib/main.js",
     "test": "mocha test/*.test.js",
     "test-steam": "node test/test-steam.js",
     "test-ui": "node test/test-ui.js"
