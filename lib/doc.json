@@ -51,6 +51,15 @@
     "joinChat":"%s: Attempting to join Chat ID %s.",
     "switchChat":"%s: Chat window has been switched to %s."
   },
+  "act": {
+    "userEntered":"%s entered chat.",
+    "userLeft":"%s left chat.",
+    "userDisconnected":"%s disconnected.",
+    "userKicked":"%s was kicked by %s.",
+    "youKicked":"You have been kicked from the chat by %s.",
+    "userBanned":"%s was banned by %s.",
+    "youBanned":"You have been banned from the chat by %s."
+  },
   "cmd": {
     "wrongArgumentLength":"%s: Incorrect amount of arguments. Should be %s.",
     "argumentsNotInRange":"%s: Incorrect amount of arguments. Should be between %s and %s.",
