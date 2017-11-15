@@ -343,7 +343,7 @@ describe('Commands', function() {
 
     });
 
-    describe('/persona', function() {
+    describe('/nick', function() {
 
         const validPersona = "gnewell";
 
@@ -365,13 +365,13 @@ describe('Commands', function() {
 
         it('should set persona name if valid', function() {
             session.connected = true;
-            ui.cmd(['persona', validPersona]);
+            ui.cmd(['nick', validPersona]);
             assert(ui.steam.friends.setPersonaName.calledWith(validPersona));
         });
 
         it('should fail if no argument', function() {
             session.connected = true;
-            ui.cmd(['persona']);
+            ui.cmd(['nick']);
             assert(logger.log.calledWith('warn'));
         });
 
