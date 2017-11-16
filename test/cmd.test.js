@@ -552,7 +552,7 @@ describe('Commands', function() {
                 .calledWith("24hour", true));
         });
 
-        it ('should neglect to set array (object)', function() {
+        it('should neglect to set array (object)', function() {
             ui.cmd(['set', "autojoin", "foobar"]);
             assert(logger.log
                 .calledWith('warn', doc.cmd.cannotSetObject));
@@ -560,6 +560,46 @@ describe('Commands', function() {
 
     });
 
+    describe('/status', function() {
+
+        before(function() {
+            sinon.stub(ui.steam.friends, 'setPersonaState');
+            sinon.stub(logger, 'log');
+            this.lastState = session.state;
+        });
+
+        after(function() {
+            ui.steam.friends.setPersonaState.restore();
+            logger.log.restore();
+            session.state = this.lastState;
+        });
+
+        afterEach(function() {
+            session.connected = false;
+            ui.steam.friends.setPersonaState.reset();
+            logger.log.reset();
+        });
+
+        it('should call setPersonaState on valid state', function() {
+            session.connected = true;
+            ui.cmd(['status', 'busy']);
+            assert(ui.steam.friends.setPersonaState
+                .calledWith(ui.steam.Steam.EPersonaState.Busy));
+        });
+
+        it('should warn on disallowed state', function() {
+            session.connected = true;
+            ui.cmd(['status', 'offline']);
+            assert(logger.log.calledWith('warn', doc.cmd.invalidStatus));
+        });
+
+        it('should warn on invalid state', function() {
+            session.connected = true;
+            ui.cmd(['status', 'hungover']);
+            assert(logger.log.calledWith('warn', doc.cmd.invalidStatus));
+        });
+
+    });
 
     describe('/unblock', function() {
 
