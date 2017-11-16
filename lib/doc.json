@@ -29,6 +29,7 @@
     "scrollf":"{cyan-fg}/scrollf{/cyan-fg} - Scroll chat window forward a screen.",
     "scrollb":"{cyan-fg}/scrollb{/cyan-fg} - Scroll chat window back a screen.",
     "set":"{cyan-fg}/set OPTION VALUE{/cyan-fg} - Change the value of any config option.",
+    "status":"{cyan-fg}/status STATE{/cyan-fg} - Manually set your persona state. Can be any of the following values: online, busy, away, snooze",
     "unblock":"{cyan-fg}/unblock ID{/cyan-fg} - Remove a user from your ignore list.",
     "w":"{cyan-fg}/w NUM{/cyan-fg} - Change to window specified with number."
   },
@@ -83,7 +84,9 @@
     "invalidKey":"%s: Specified key is invalid: %s",
     "cannotSetObject":"%s: Cannot use {cyan-fg}/set{/cyan-fg} command on object: %s",
     "saveSuccess":"%s: Config file has been saved successfully.",
-    "reloadSuccess":"%s: Config file has been reloaded successfully."
+    "reloadSuccess":"%s: Config file has been reloaded successfully.",
+    "statusChanged":"%s: Your status has been set to %s.",
+    "invalidStatus":"%s: Invalid state specified: %s"
   },
   "autojoin": {
     "noAction":"%s: Please specify one of the following actions as an argument to {cyan-fg}/autojoin{/cyan-fg}: add, remove, run",
