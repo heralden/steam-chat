@@ -34,6 +34,8 @@
     "w":"{cyan-fg}/w NUM{/cyan-fg} - Change to window specified with number."
   },
   "msg": {
+    "connecting":"Connecting to the Steam servers.",
+    "loggedIn":"Logged in successfully!",
     "notConnected":"You are currently not connected to the Steam servers.",
     "help":"%s: Use {cyan-fg}/cmds{/cyan-fg} to list all available commands. For usage information, use the {cyan-fg}/help CMD{/cyan-fg} command. If you wish to print the help page for all available commands, use the {cyan-fg}/help all{/cyan-fg} command.", 
     "helpNotExist":"%s: help entry does not exist for the following command: %s",
