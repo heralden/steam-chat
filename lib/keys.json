@@ -1,8 +1,10 @@
 {
     "pageup": "scrollb",
     "pagedown": "scrollf",
+    "M-u": "scrolluser",
     "M-v": "scrollb",
     "C-v": "scrollf",
+    "M-w": "part",
     "C-c": "quit",
     "M-1": "w 1",
     "M-2": "w 2",

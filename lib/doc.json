@@ -28,6 +28,7 @@
     "save":"{cyan-fg}/save{/cyan-fg} - Save login credentials and config options to 'config.json'.",
     "scrollf":"{cyan-fg}/scrollf{/cyan-fg} - Scroll chat window forward a screen.",
     "scrollb":"{cyan-fg}/scrollb{/cyan-fg} - Scroll chat window back a screen.",
+    "scrolluser":"{cyan-fg}/scrolluser{/cyan-fg} - Scroll overflowing userlist names.",
     "set":"{cyan-fg}/set OPTION VALUE{/cyan-fg} - Change the value of any config option.",
     "status":"{cyan-fg}/status STATE{/cyan-fg} - Manually set your persona state. Can be any of the following values: online, busy, away, snooze",
     "unblock":"{cyan-fg}/unblock ID{/cyan-fg} - Remove a user from your ignore list.",
