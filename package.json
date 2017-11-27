@@ -20,7 +20,8 @@
   },
   "scripts": {
     "start": "node lib/main.js",
-    "test": "mocha test/*.test.js",
+    "lint": "./node_modules/eslint/bin/eslint.js \"lib\"",
+    "test": "./node_modules/mocha/bin/mocha \"test/*.test.js\"",
     "test-steam": "node test/test-steam.js",
     "test-ui": "node test/test-ui.js"
   },
@@ -32,6 +33,7 @@
     "curses"
   ],
   "devDependencies": {
+    "eslint": "^4.12.0",
     "mocha": "^3.5.0",
     "sinon": "^1.17.7"
   }
