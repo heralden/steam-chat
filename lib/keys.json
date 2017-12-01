@@ -1,6 +1,7 @@
 {
     "pageup": "scrollb",
     "pagedown": "scrollf",
+    "M-g": "games",
     "M-u": "scrolluser",
     "M-v": "scrollb",
     "C-v": "scrollf",

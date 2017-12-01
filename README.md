@@ -59,6 +59,7 @@ Edit the `lib/keys.json` file if you wish to customize the keybindings. By defau
 
 - `pageup, M-v: scrollb`
 - `pagedown, C-v: scrollf`
+- `M-g: games`
 - `M-u: scrolluser`
 - `M-w: part`
 - `C-c: quit`
