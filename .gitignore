@@ -4,6 +4,6 @@ config.json
 servers.json
 /sentryfile*
 /steam-chat.log
-/session.log
+/dump.log
 TODO
 .*.swp
