@@ -1,7 +1,6 @@
 node_modules
 /npm-debug*
 config.json
-servers.json
 /sentryfile*
 /steam-chat.log
 /dump.log
