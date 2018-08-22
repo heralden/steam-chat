@@ -4,9 +4,9 @@ Uses [node-steam](https://github.com/seishun/node-steam) and [blessed](https://g
 
 **Note: Please update to a newer Node.js version if you get any weird errors. This project uses various ES2015 features which aren't supported in earlier Node.js releases.**
 
-## Version 0.1.0
+## [New Steam Chat](https://steamcommunity.com/updates/chatupdate)
 
-steam-chat has been completely rewritten from scratch. The old version is available as a [release](https://github.com/rubyconn/steam-chat/releases/tag/v0.0.4-alpha) if you're missing any functionality or experiencing issues.
+As of [June 12th 2018](https://steamcommunity.com/games/593110/announcements/detail/1666776116222762142), Steam made available their new chat client through an open beta. Since then, any client not supporting the new API has been barred from joining group chats. This means that steam-chat doesn't work with group chats anymore, and will probably never again unless support for the new API is added to node-steam.
 
 # Usage
 
